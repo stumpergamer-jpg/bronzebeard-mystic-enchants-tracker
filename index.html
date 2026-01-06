@@ -111,6 +111,13 @@
 
         tbody::-webkit-scrollbar, .options-list::-webkit-scrollbar { width: 8px; }
         tbody::-webkit-scrollbar-thumb, .options-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -20px); }
+            15% { opacity: 1; transform: translate(-50%, 0); }
+            85% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
     </style>
 </head>
 <body>
@@ -163,10 +170,6 @@
                     <span id="regionDisplayText">All Regions</span>
                 </div>
                 <div id="regionOptions" class="options-list"></div>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; padding-top:15px;">
-                <input type="checkbox" id="hideCollected" onchange="renderTable()"> 
-                <label for="hideCollected" style="font-size: 0.75rem; cursor:pointer;">Hide Collected</label>
             </div>
         </div>
     </div>
@@ -229,7 +232,7 @@
     };
 
     let enchants = [
-        // PRIEST
+// PRIEST
         { name: "Renewed through Absolution", class: "Priest", zone: "Alterac Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=ATlQH4N9Zqs" },
         { name: "Zany Zealot", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=f9fh3xYX0gU" },
         { name: "Wraithweaver: Shadow Orbs", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=Q1Of-C_1bZM" },
@@ -497,12 +500,12 @@
     let currentFaction = "Both";
     let sortKey = 'zone'; 
     let sortOrder = 1;
+    let hasUnsavedChanges = false;
 
     function renderTable() {
         const body = document.getElementById('reBody');
         const searchInput = document.getElementById('searchInput');
         const search = searchInput ? searchInput.value.toLowerCase() : "";
-        const hideChecked = document.getElementById('hideCollected').checked;
 
         const factionPool = enchants.filter(e => currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction);
         
@@ -513,8 +516,7 @@
             const matchesSearch = e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search);
             const matchesClass = currentClass === "all" || e.class === currentClass;
             const matchesZone = currentRegion === "all" || e.zone === currentRegion;
-            const isColl = collectedNames.includes(e.name.toLowerCase());
-            return matchesSearch && matchesClass && matchesZone && (!hideChecked || !isColl);
+            return matchesSearch && matchesClass && matchesZone;
         });
 
         filtered.sort((a, b) => {
@@ -550,107 +552,11 @@
         updateRegionDropdown(factionPool);
     }
 
-    function handleSearchInput() {
-        const val = document.getElementById('searchInput').value;
-        document.getElementById('clearSearch').style.display = val.length > 0 ? 'flex' : 'none';
-        renderTable();
-    }
-
-    function clearSearch() {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('clearSearch').style.display = 'none';
-        renderTable();
-    }
-
-    function toggleDropdown(e, id) {
-        e.stopPropagation();
-        const list = document.getElementById(id);
-        const isOpen = list.classList.contains('show');
-        document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
-        if (!isOpen) list.classList.add('show');
-    }
-
-    function selectClass(c) {
-        currentClass = c;
-        const dispText = document.getElementById('classDisplayText');
-        const dispIcon = document.getElementById('classDisplayIcon');
-        if (c === 'all') { dispText.innerText = 'All Classes'; dispIcon.style.display = 'none'; }
-        else { dispText.innerText = c; dispIcon.src = `https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg`; dispIcon.style.display = 'inline-block'; }
-        renderTable();
-    }
-
-    function selectRegion(r) {
-        currentRegion = r;
-        document.getElementById('regionDisplayText').innerText = r === 'all' ? 'All Regions' : r;
-        renderTable();
-    }
-
-    function updateRegionDropdown(pool) {
-        const container = document.getElementById('regionOptions');
-        const zones = [...new Set(pool.map(e => e.zone))].sort();
-        let html = `<div class="option-item" onclick="selectRegion('all')">All Regions</div>`;
-        zones.forEach(z => {
-            html += `<div class="option-item" onclick="selectRegion('${z}')">${z}</div>`;
-        });
-        container.innerHTML = html;
-        if (currentRegion !== 'all' && !zones.includes(currentRegion)) {
-            currentRegion = 'all';
-            document.getElementById('regionDisplayText').innerText = 'All Regions';
-        }
-    }
-
-    function setSort(key) {
-        if (sortKey === key) sortOrder *= -1;
-        else { sortKey = key; sortOrder = 1; }
-        renderTable();
-    }
-
-    function updateSortIcons() {
-        ['name', 'class', 'zone'].forEach(key => {
-            const el = document.getElementById(`sort-${key}`);
-            if (el) el.innerText = sortKey === key ? (sortOrder === 1 ? " ▲" : " ▼") : "";
-        });
-    }
-
-    function setFaction(f) {
-        currentFaction = f;
-        document.querySelectorAll('.fac-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(f === 'Both' ? 'fac-both' : `fac-${f.toLowerCase()}`).classList.add('active');
-        renderTable();
-    }
-
     function toggleRE(name, shouldAdd) {
         if (shouldAdd) { if (!collectedNames.includes(name)) collectedNames.push(name); }
         else { collectedNames = collectedNames.filter(n => n !== name); }
+        hasUnsavedChanges = true;
         renderTable();
-    }
-
-    function updateProgress(pool) {
-        const calc = (p) => {
-            const uniq = [...new Set(p.map(e => e.name.toLowerCase()))];
-            return [uniq.filter(n => collectedNames.includes(n)).length, uniq.length];
-        };
-        
-        const [gD, gT] = calc(pool); 
-        updateBar('global', gD, gT);
-        
-        // Update Class Bar + Dynamic Title
-        const classTitle = currentClass === 'all' ? 'Class Progress' : `${currentClass} Progress`;
-        document.getElementById('classProgressLabel').innerText = classTitle;
-        const [cD, cT] = calc(pool.filter(e => currentClass === 'all' || e.class === currentClass)); 
-        updateBar('class', cD, cT);
-        
-        // Update Region Bar + Dynamic Title
-        const regionTitle = currentRegion === 'all' ? 'Region Progress' : `${currentRegion} Progress`;
-        document.getElementById('regionProgressLabel').innerText = regionTitle;
-        const [zD, zT] = calc(pool.filter(e => currentRegion === 'all' || e.zone === currentRegion)); 
-        updateBar('region', zD, zT);
-    }
-
-    function updateBar(id, val, max) {
-        const perc = max === 0 ? 0 : (val / max) * 100;
-        document.getElementById(`${id}Fill`).style.width = `${perc}%`;
-        document.getElementById(`${id}Text`).innerText = `${val}/${max}`;
     }
 
     function bulkAction(check) {
@@ -662,35 +568,151 @@
                 else if (!check) collectedNames = collectedNames.filter(n => n !== name);
             }
         });
+        hasUnsavedChanges = true;
         renderTable();
     }
 
-    function exportData() {
-    // 1. Sauvegarde interne dans le navigateur
-    localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
+    async function exportData() {
+        localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
+        const dataStr = JSON.stringify(collectedNames, null, 2);
+        const fileName = `wow_tracker_save_${new Date().toISOString().split('T')[0]}.json`;
 
-    // 2. Préparation du fichier JSON pour le téléchargement
-    const dataStr = JSON.stringify(collectedNames, null, 2); // Formatage propre avec 2 espaces
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = window.URL.createObjectURL(dataBlob);
-    
-    // 3. Création d'un lien invisible pour déclencher le téléchargement
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    
-    // Nom du fichier avec la date du jour pour s'y retrouver
-    const date = new Date().toISOString().split('T')[0];
-    downloadLink.download = `wow_tracker_save_${date}.json`;
-    
-    // 4. Déclenchement et nettoyage
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    window.URL.revokeObjectURL(url);
+        if ('showSaveFilePicker' in window) {
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: fileName,
+                    types: [{ description: 'JSON File', accept: {'application/json': ['.json']} }],
+                });
+                const writable = await handle.createWritable();
+                await writable.write(dataStr);
+                await writable.close();
+                hasUnsavedChanges = false;
+                showStatusMessage("Progression sauvegardée avec succès !");
+            } catch (err) { console.log("Sauvegarde annulée"); }
+        } else {
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = window.URL.createObjectURL(dataBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url; downloadLink.download = fileName;
+            document.body.appendChild(downloadLink); downloadLink.click();
+            document.body.removeChild(downloadLink); window.URL.revokeObjectURL(url);
+            hasUnsavedChanges = false;
+            showStatusMessage("Fichier téléchargé !");
+        }
+    }
 
-    alert("Saved progress file !");
-}
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (Array.isArray(data)) {
+                    collectedNames = data;
+                    localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
+                    hasUnsavedChanges = false;
+                    renderTable();
+                    showStatusMessage("Fichier chargé avec succès !");
+                }
+            } catch (err) { alert("Erreur lors de l'importation."); }
+        };
+        reader.readAsText(file);
+    }
 
+    function showStatusMessage(text) {
+        const msg = document.createElement('div');
+        msg.textContent = text;
+        msg.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 10px 20px; border-radius: 5px; z-index: 10000; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: fadeInOut 3s forwards;`;
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 3000);
+    }
+
+    window.addEventListener('beforeunload', (e) => {
+        if (hasUnsavedChanges) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    function handleSearchInput() {
+        const val = document.getElementById('searchInput').value;
+        document.getElementById('clearSearch').style.display = val.length > 0 ? 'flex' : 'none';
+        renderTable();
+    }
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('clearSearch').style.display = 'none';
+        renderTable();
+    }
+    function toggleDropdown(e, id) {
+        e.stopPropagation();
+        const list = document.getElementById(id);
+        const isOpen = list.classList.contains('show');
+        document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
+        if (!isOpen) list.classList.add('show');
+    }
+    function selectClass(c) {
+        currentClass = c;
+        const dispText = document.getElementById('classDisplayText');
+        const dispIcon = document.getElementById('classDisplayIcon');
+        if (c === 'all') { dispText.innerText = 'All Classes'; dispIcon.style.display = 'none'; }
+        else { dispText.innerText = c; dispIcon.src = `https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg`; dispIcon.style.display = 'inline-block'; }
+        renderTable();
+    }
+    function selectRegion(r) {
+        currentRegion = r;
+        document.getElementById('regionDisplayText').innerText = r === 'all' ? 'All Regions' : r;
+        renderTable();
+    }
+    function updateRegionDropdown(pool) {
+        const container = document.getElementById('regionOptions');
+        const zones = [...new Set(pool.map(e => e.zone))].sort();
+        let html = `<div class="option-item" onclick="selectRegion('all')">All Regions</div>`;
+        zones.forEach(z => { html += `<div class="option-item" onclick="selectRegion('${z}')">${z}</div>`; });
+        container.innerHTML = html;
+        if (currentRegion !== 'all' && !zones.includes(currentRegion)) {
+            currentRegion = 'all';
+            document.getElementById('regionDisplayText').innerText = 'All Regions';
+        }
+    }
+    function setSort(key) {
+        if (sortKey === key) sortOrder *= -1;
+        else { sortKey = key; sortOrder = 1; }
+        renderTable();
+    }
+    function updateSortIcons() {
+        ['name', 'class', 'zone'].forEach(key => {
+            const el = document.getElementById(`sort-${key}`);
+            if (el) el.innerText = sortKey === key ? (sortOrder === 1 ? " ▲" : " ▼") : "";
+        });
+    }
+    function setFaction(f) {
+        currentFaction = f;
+        document.querySelectorAll('.fac-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(f === 'Both' ? 'fac-both' : `fac-${f.toLowerCase()}`).classList.add('active');
+        renderTable();
+    }
+    function updateProgress(pool) {
+        const calc = (p) => {
+            const uniq = [...new Set(p.map(e => e.name.toLowerCase()))];
+            return [uniq.filter(n => collectedNames.includes(n)).length, uniq.length];
+        };
+        const [gD, gT] = calc(pool); updateBar('global', gD, gT);
+        const classTitle = currentClass === 'all' ? 'Class Progress' : `${currentClass} Progress`;
+        document.getElementById('classProgressLabel').innerText = classTitle;
+        const [cD, cT] = calc(pool.filter(e => currentClass === 'all' || e.class === currentClass)); 
+        updateBar('class', cD, cT);
+        const regionTitle = currentRegion === 'all' ? 'Region Progress' : `${currentRegion} Progress`;
+        document.getElementById('regionProgressLabel').innerText = regionTitle;
+        const [zD, zT] = calc(pool.filter(e => currentRegion === 'all' || e.zone === currentRegion)); 
+        updateBar('region', zD, zT);
+    }
+    function updateBar(id, val, max) {
+        const perc = max === 0 ? 0 : (val / max) * 100;
+        document.getElementById(`${id}Fill`).style.width = `${perc}%`;
+        document.getElementById(`${id}Text`).innerText = `${val}/${max}`;
+    }
     function initClassOptions() {
         const container = document.getElementById('classOptions');
         let html = `<div class="option-item" onclick="selectClass('all')">All Classes</div>`;
@@ -699,7 +721,6 @@
         });
         container.innerHTML = html;
     }
-
     document.addEventListener('click', () => {
         document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
     });
@@ -709,4 +730,4 @@
 </script>
 
 </body>
-</html>	
+</html>
