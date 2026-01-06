@@ -7,6 +7,7 @@ In order to use it :
 2) Click this link to use it in an explorer version : [Mystic Enchants Tracker](https://stumpergamer-jpg.github.io/bronzebeard-mystic-enchants-tracker/)
 
 Don't forget to click the "save" button to keep your collection progress !
+Added Class : Priest, Rogue, Paladin, Warrior and Hunter.
 
 Big shout-out to the youtuber [@shadowmeldgg](https://www.youtube.com/@shadowmeldgg) for his wonderful work in gathering and sharing the locations of those Mystic Enchants !
 
