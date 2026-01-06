@@ -665,14 +665,31 @@
         renderTable();
     }
 
-    function exportData() { localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames)); alert("Saved!"); }
-    function importData(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => { collectedNames = JSON.parse(e.target.result); renderTable(); };
-        reader.readAsText(file);
-    }
+    function exportData() {
+    // 1. Sauvegarde interne dans le navigateur
+    localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
+
+    // 2. Préparation du fichier JSON pour le téléchargement
+    const dataStr = JSON.stringify(collectedNames, null, 2); // Formatage propre avec 2 espaces
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = window.URL.createObjectURL(dataBlob);
+    
+    // 3. Création d'un lien invisible pour déclencher le téléchargement
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    
+    // Nom du fichier avec la date du jour pour s'y retrouver
+    const date = new Date().toISOString().split('T')[0];
+    downloadLink.download = `wow_tracker_save_${date}.json`;
+    
+    // 4. Déclenchement et nettoyage
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    window.URL.revokeObjectURL(url);
+
+    alert("Saved progress file !");
+}
 
     function initClassOptions() {
         const container = document.getElementById('classOptions');
