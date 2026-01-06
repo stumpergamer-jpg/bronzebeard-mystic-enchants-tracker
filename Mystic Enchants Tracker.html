@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WoW Ascension - RE Tracker Pro v1.0.0</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        @font-face {
+            font-family: 'Lifecraft';
+            src: url('https://db.onlinewebfonts.com/t/790327f4740e6c6052733979727f712f.woff2') format('woff2');
+        }
+
+        :root {
+            --bg-dark: #0f0f0f; --card-bg: #1a1a1a; --accent: #f8b700;
+            --text-main: #e0e0e0; --text-dim: #a0a0a0; --border: #333; 
+            --input-bg: #222; --danger: #c41e3a; --success: #4caf50;
+            --alliance: #0078ff; --horde: #8c1616;
+            --font-main: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: var(--font-main); background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 10px; line-height: 1.4; overflow: hidden; }
+        .container { max-width: 1250px; margin: auto; height: 100vh; display: flex; flex-direction: column; }
+        
+        .header-section { text-align: center; margin-bottom: 10px; flex: 0 0 auto; }
+        h1 { font-family: 'Lifecraft', serif; color: var(--accent); margin: 0; font-size: 2.8rem; letter-spacing: 2px; text-shadow: 3px 3px 0px #000; font-weight: normal; }
+
+        .top-bar { flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
+        .data-management { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .data-group { display: flex; gap: 8px; align-items: center; }
+        
+        label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .btn-data { font-family: var(--font-main); font-weight: 600; background: #2a2a2a; border: 1px solid #444; color: #ddd; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+        .btn-data:hover { border-color: var(--accent); color: var(--accent); }
+
+        .search-wrapper { position: relative; width: 100%; }
+        .search-wrapper::before {
+            content: "🔍"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            font-size: 0.9rem; color: var(--text-dim); pointer-events: none;
+        }
+        #searchInput { width: 100%; padding: 10px 40px 10px 40px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: white; font-family: var(--font-main); font-size: 0.9rem; }
+        #clearSearch { 
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: #333; color: #aaa; border: none; border-radius: 50%; 
+            width: 20px; height: 20px; cursor: pointer; font-size: 12px; 
+            display: none; align-items: center; justify-content: center; line-height: 1;
+        }
+        #clearSearch:hover { background: var(--danger); color: white; }
+
+        .dropdown-group { flex: 1; position: relative; }
+        .custom-select { 
+            font-family: var(--font-main); background-color: var(--input-bg); border: 1px solid var(--border); 
+            color: white; font-size: 0.85rem; border-radius: 6px; height: 36px; padding: 0 10px; 
+            width: 100%; display: flex; align-items: center; cursor: pointer; 
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); 
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .options-list { 
+            position: absolute; top: 100%; left: 0; right: 0; background: #222; 
+            border: 1px solid var(--border); z-index: 100; display: none; 
+            border-radius: 6px; max-height: 250px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .options-list.show { display: block; }
+        .option-item { padding: 8px 12px; display: flex; align-items: center; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #333; transition: 0.1s; }
+        .option-item:hover { background: #333; color: var(--accent); }
+
+        .progress-section { flex: 0 0 auto; background: var(--card-bg); padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .progress-container { display: flex; flex-direction: column; gap: 6px; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; }
+        .progress-label { font-size: 0.65rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+        .progress-text { font-size: 0.75rem; font-weight: 800; color: var(--text-main); }
+        .progress-bar-bg { background: #111; height: 8px; border-radius: 4px; border: 1px solid #333; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #b8860b, var(--accent)); transition: width 0.5s; }
+
+        .table-wrapper { flex: 1 1 auto; overflow: hidden; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); display: flex; flex-direction: column; }
+        table { width: 100%; border-collapse: collapse; display: flex; flex-direction: column; height: 100%; }
+        thead { flex: 0 0 auto; background: #252525; display: table; width: 100%; table-layout: fixed; }
+        tbody { flex: 1 1 auto; display: block; overflow-y: scroll; width: 100%; }
+        tr { display: table; width: 100%; table-layout: fixed; }
+        
+        th { padding: 12px; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; border-bottom: 2px solid var(--border); text-align: left; cursor: pointer; user-select: none; }
+        th:hover { background: #333; }
+        .col-collect { width: 80px; text-align: center; font-size: 0.65rem; }
+        
+        td { padding: 8px 12px; border-bottom: 1px solid #252525; font-size: 0.85rem; }
+        tr:hover td { background: #222; }
+        tr.collected { opacity: 0.45; }
+        
+        .btn-action { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.2s; margin: auto; }
+        .btn-collect { background: rgba(76, 175, 80, 0.1); color: var(--success); border: 1px solid var(--success); }
+        .btn-collect:hover { background: var(--success); color: white; }
+        .btn-remove { background: rgba(196, 30, 58, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-remove:hover { background: var(--danger); color: white; }
+
+        .icon-class { width: 18px; height: 18px; border-radius: 3px; vertical-align: middle; margin-right: 8px; }
+        .btn-video { font-size: 0.6rem; padding: 3px 8px; background: var(--danger); color: white; text-decoration: none; border-radius: 4px; font-weight: 800; transition: 0.2s ease; display: inline-block; }
+        .btn-video:hover { background: #ff4d4d; box-shadow: 0 0 8px rgba(196, 30, 58, 0.4); transform: translateY(-1px); }
+
+        footer { flex: 0 0 auto; margin-top: 10px; padding: 10px; text-align: center; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.8rem; }
+        .credits-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+        
+        .faction-selector { display: flex; background: #111; padding: 3px; border-radius: 6px; border: 1px solid #333; gap: 4px; }
+        .fac-btn { padding: 4px 10px; border: 1px solid transparent; background: transparent; color: #666; cursor: pointer; font-weight: bold; border-radius: 4px; transition: 0.2s; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
+        .fac-btn.active.all { background: #333; color: var(--accent); border: 1px solid var(--accent); }
+        .fac-btn.active.alliance { background: var(--alliance); color: white; }
+        .fac-btn.active.horde { background: var(--horde); color: white; }
+        .fac-icon { width: 16px; height: 16px; object-fit: contain; }
+
+        tbody::-webkit-scrollbar, .options-list::-webkit-scrollbar { width: 8px; }
+        tbody::-webkit-scrollbar-thumb, .options-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <h1>Mystic Enchants Tracker</h1>
+    </div>
+
+    <div class="top-bar">
+        <div class="data-management">
+            <div class="data-group">
+                <label>Faction</label>
+                <div class="faction-selector">
+                    <button class="fac-btn all active" id="fac-both" onclick="setFaction('Both')">ALL</button>
+                    <button class="fac-btn alliance" id="fac-alliance" onclick="setFaction('Alliance')">
+                        <img src="https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg" class="fac-icon">
+                    </button>
+                    <button class="fac-btn horde" id="fac-horde" onclick="setFaction('Horde')">
+                        <img src="https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg" class="fac-icon">
+                    </button>
+                </div>
+            </div>
+            <div class="data-group">
+                <button class="btn-data" style="color:var(--success)" onclick="bulkAction(true)">✓ Collect All</button>
+                <button class="btn-data" style="color:var(--danger)" onclick="bulkAction(false)">✗ Collect None</button>
+                <button class="btn-data" onclick="exportData()">💾 Save</button>
+                <button class="btn-data" onclick="document.getElementById('importFile').click()">📂 Load</button>
+                <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
+            </div>
+        </div>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Search with enchant name or region..." onkeyup="handleSearchInput()">
+            <button id="clearSearch" onclick="clearSearch()">✕</button>
+        </div>
+
+        <div class="data-management">
+            <div class="dropdown-group">
+                <label>Class</label>
+                <div class="custom-select" onclick="toggleDropdown(event, 'classOptions')">
+                    <img src="" class="icon-class" id="classDisplayIcon" style="display:none">
+                    <span id="classDisplayText">All Classes</span>
+                </div>
+                <div id="classOptions" class="options-list"></div>
+            </div>
+            <div class="dropdown-group">
+                <label>Region</label>
+                <div class="custom-select" onclick="toggleDropdown(event, 'regionOptions')">
+                    <span id="regionDisplayText">All Regions</span>
+                </div>
+                <div id="regionOptions" class="options-list"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; padding-top:15px;">
+                <input type="checkbox" id="hideCollected" onchange="renderTable()"> 
+                <label for="hideCollected" style="font-size: 0.75rem; cursor:pointer;">Hide Collected</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-label">Global Progress</span>
+                <span id="globalText" class="progress-text">0/0</span>
+            </div>
+            <div class="progress-bar-bg"><div id="globalFill" class="progress-bar-fill"></div></div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-header">
+                <span id="classProgressLabel" class="progress-label">Class Progress</span>
+                <span id="classText" class="progress-text">0/0</span>
+            </div>
+            <div class="progress-bar-bg"><div id="classFill" class="progress-bar-fill" style="background: var(--success);"></div></div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-header">
+                <span id="regionProgressLabel" class="progress-label">Region Progress</span>
+                <span id="regionText" class="progress-text">0/0</span>
+            </div>
+            <div class="progress-bar-bg"><div id="regionFill" class="progress-bar-fill" style="background: #0078ff;"></div></div>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-collect">Collect</th>
+                    <th onclick="setSort('name')">Enchant <span id="sort-name" class="sort-icon"></span></th>
+                    <th onclick="setSort('class')">Class <span id="sort-class" class="sort-icon"></span></th>
+                    <th style="width:100px;">Faction</th>
+                    <th onclick="setSort('zone')">Location <span id="sort-zone" class="sort-icon"></span></th>
+                    <th style="width: 100px; text-align:center;">Video</th>
+                </tr>
+            </thead>
+            <tbody id="reBody"></tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>Version 1.0.0 • Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> for the locations data</p>
+    </footer>
+</div>
+
+<script>
+    const classData = { 
+        "Priest": "classicon_priest", "Hunter": "classicon_hunter", "Mage": "classicon_mage", 
+        "Warrior": "classicon_warrior", "Paladin": "classicon_paladin", "Rogue": "classicon_rogue", 
+        "Druid": "classicon_druid", "Shaman": "classicon_shaman", "Warlock": "classicon_warlock" 
+    };
+
+    const icons = {
+        alliance: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg",
+        horde: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg"
+    };
+
+    let enchants = [
+        // PRIEST
+        { name: "Renewed through Absolution", class: "Priest", zone: "Alterac Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=ATlQH4N9Zqs" },
+        { name: "Zany Zealot", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=f9fh3xYX0gU" },
+        { name: "Wraithweaver: Shadow Orbs", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=Q1Of-C_1bZM" },
+        { name: "Dark Focus", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=y-pP1WJ7f3E" },
+        { name: "Wraithweaver: Echoing Shadows", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=74LnmLoSguw" },
+        { name: "Divine Star", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=wQ6JTF8sGl4" },
+        { name: "Leap of Faith", class: "Priest", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=8S7R2iFhwjY" },
+        { name: "Purgation by Light", class: "Priest", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=Ueh9Ur-Vy0M" },
+        { name: "Intense Focus", class: "Priest", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=MYv8EhHdsw0" },
+        { name: "Soul Restorations", class: "Priest", zone: "Badlands", faction: "Both", video: "https://www.youtube.com/watch?v=KT6GRj6L3lM" },
+        { name: "Shadow Reserves", class: "Priest", zone: "Darkshore", faction: "Both", video: "https://www.youtube.com/watch?v=pkrgakg_Hyo" },
+        { name: "Grasp of Darkness", class: "Priest", zone: "Deadwind Pass", faction: "Both", video: "https://www.youtube.com/watch?v=EEGOSy8t3ec" },
+        { name: "Divine Symmetry", class: "Priest", zone: "Deadwind Pass", faction: "Both", video: "https://www.youtube.com/watch?v=nnZZld9e1y4" },
+        { name: "Halo", class: "Priest", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=S9CxV1XBnts" },
+        { name: "Void Shift", class: "Priest", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=KxD2QyTB-Pw" },
+        { name: "Shadow Visions", class: "Priest", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=DvEYOd6XUtw" },
+        { name: "Atonement", class: "Priest", zone: "Dustwallow Marsh", faction: "Both", video: "https://www.youtube.com/watch?v=_5Rm2_kgwHo" },
+        { name: "Void Eruption", class: "Priest", zone: "Dustwallow Marsh", faction: "Both", video: "https://www.youtube.com/watch?v=T0WTkcNfOsE" },
+        { name: "Power Word: Barrier", class: "Priest", zone: "Dustwallow Marsh", faction: "Both", video: "https://www.youtube.com/watch?v=1NXtWIUYWKU" },
+        { name: "Accelerated Ascension", class: "Priest", zone: "Duskwood", faction: "Both", video: "https://www.youtube.com/watch?v=jRvUkftHgxc" },
+        { name: "Words of Healing", class: "Priest", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=cToIpMMPJ0I" },
+        { name: "Discipline Mastery", class: "Priest", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=EIu6jBbtndI" },
+        { name: "Holy Ascension", class: "Priest", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=yom9HRVUm5Y" },
+        { name: "Psychic Influence", class: "Priest", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=VqegQ4tDE7k" },
+        { name: "Purity of Light", class: "Priest", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=7YGVZV_x5T4" },
+        { name: "Prayer of Circle", class: "Priest", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=CICWD4bFIW0" },
+        { name: "Holy Servitude", class: "Priest", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=6KaaDNss_Vo" },
+        { name: "Radiant Star", class: "Priest", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=GycnRQYuKjE" },
+        { name: "Endless Void", class: "Priest", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=MiB8aFBrCeg" },
+        { name: "Angelic Feather", class: "Priest", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=_cMi_4EyUI8" },
+        { name: "Good Fortune", class: "Priest", zone: "Hillsbrad Foothills", faction: "Both", video: "https://www.youtube.com/watch?v=ItiXGDwwOR4" },
+        { name: "Armor of Faith", class: "Priest", zone: "Hillsbrad Foothills", faction: "Both", video: "https://www.youtube.com/watch?v=9CleN4IMuXw" },
+        { name: "Centered", class: "Priest", zone: "Hillsbrad Foothills", faction: "Both", video: "https://www.youtube.com/watch?v=gF50FDHbPjg" },
+        { name: "Holy Mastery", class: "Priest", zone: "Hillsbrad Foothills", faction: "Both", video: "https://www.youtube.com/watch?v=KuURqhdeMuE" },
+        { name: "Light and Shadow", class: "Priest", zone: "Loch Modan", faction: "Alliance", video: "https://www.youtube.com/watch?v=oc46grMGZ28" },
+        { name: "Promise of Renewal", class: "Priest", zone: "Redridge Mountains", faction: "Alliance", video: "https://www.youtube.com/watch?v=g8iBWkbBBMA" },
+        { name: "Twilight Paragon", class: "Priest", zone: "Silithus", faction: "Both", video: "https://www.youtube.com/watch?v=WQhlQXnt5Vs" },
+        { name: "Madness of the Old Gods", class: "Priest", zone: "Silithus", faction: "Both", video: "https://www.youtube.com/watch?v=2lpZB4p47ns" },
+        { name: "Light and Shadow", class: "Priest", zone: "Silverpine Forest", faction: "Horde", video: "https://www.youtube.com/watch?v=oc46grMGZ28" },
+        { name: "Psychic Infusion", class: "Priest", zone: "Silverpine Forest", faction: "Both", video: "https://www.youtube.com/watch?v=PbYsS_9-IHc" },
+        { name: "Promise of Renewal", class: "Priest", zone: "Silverpine Forest", faction: "Horde", video: "https://www.youtube.com/watch?v=5gpw-cVSPaM" },
+        { name: "Energizing Prayer", class: "Priest", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=OhNIGodJK4E" },
+        { name: "Light at the End of the Tunnel", class: "Priest", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=1iSlFDxVikU" },
+        { name: "Higher Power", class: "Priest", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=5tET9fxhfvg" },
+        { name: "Holy Radiance", class: "Priest", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=7tKoJ16-R8A" },
+        { name: "Power of Generosity", class: "Priest", zone: "Tanaris", faction: "Both", video: "https://www.youtube.com/watch?v=c8J5ItF2SdU" },
+        { name: "Pendulum", class: "Priest", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=RzFW-QdreAs" },
+        { name: "Faith Rekindled", class: "Priest", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=iip12MxZ_sQ" },
+        { name: "Circle of Life", class: "Priest", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=yKsYTSoDQrU" },
+        { name: "Grateful Prayers", class: "Priest", zone: "The Hinterlands", faction: "Both", video: "https://www.youtube.com/watch?v=d-SvkWztW68" },
+        { name: "Divine Star", class: "Priest", zone: "Tirisfal Glades", faction: "Both", video: "https://www.youtube.com/watch?v=HPDLhz_D-WA" },
+        { name: "Chastise", class: "Priest", zone: "Tirisfal Glades", faction: "Both", video: "https://www.youtube.com/watch?v=ZbpZkhkB06o" },
+        { name: "Refilling the Well", class: "Priest", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=YMynDgquhMs" },
+        { name: "Vampiric Death", class: "Priest", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=qak1-rYcVhc" },
+        { name: "Words of Time", class: "Priest", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=FYK-3q2Dnlg" },
+        { name: "Spirited Penance", class: "Priest", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=QRupBcRDP2U" },
+        { name: "Shadow Mastery", class: "Priest", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=EIJFNnzUtyQ" },
+        { name: "Shattered Renewal", class: "Priest", zone: "Westfall", faction: "Alliance", video: "https://www.youtube.com/watch?v=m1clNyjWwLU" },
+        { name: "Shattered Renewal", class: "Priest", zone: "The Barrens", faction: "Horde", video: "https://www.youtube.com/watch?v=m1clNyjWwLU" },
+        { name: "Lightburst", class: "Priest", zone: "Wetlands", faction: "Alliance", video: "https://www.youtube.com/watch?v=raVWXcpFtEQ" },
+        { name: "Lightburst", class: "Priest", zone: "Tirisfal Glades", faction: "Horde", video: "https://www.youtube.com/watch?v=raVWXcpFtEQ" },
+        { name: "Wanding", class: "Priest", zone: "Wetlands", faction: "Both", video: "https://www.youtube.com/watch?v=k2BDXoCl74A" },
+        { name: "Impending Doom", class: "Priest", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=Jy5iD7OoSe0" },
+        { name: "Whispers of the Old Gods", class: "Priest", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=dpVd_ZBFHBI" },
+
+        // HUNTER
+        { name: "Hydra’s Sting", class: "Hunter", zone: "Ashenvale", faction: "Both", video: "https://youtu.be/aN13siREDS8" },
+        { name: "Carving Strikes", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/aK2dogC2q8E" },
+        { name: "Trap Launcher", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/X3YWR425PeU" },
+        { name: "Savagery", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/B6QdqVZJhb8" },
+        { name: "Quickfire Tactics", class: "Hunter", zone: "Wetlands", faction: "Alliance", video: "https://youtu.be/c9hIcGR8DlU" },
+        { name: "Quickfire Tactics", class: "Hunter", zone: "The Barrens", faction: "Horde", video: "https://youtu.be/c9hIcGR8DlU" },
+        { name: "Deadly Instinct", class: "Hunter", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/7f9snCaqekc" },
+        { name: "Steady Pace", class: "Hunter", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/P43RlGNGeto" },
+        { name: "Blood Tracker: Deadly Bite", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/l39C5o0ugqM" },
+        { name: "Beastmastery Mastery", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/yyArxvW0ge4" },
+        { name: "Blackwidow Strikes", class: "Hunter", zone: "Silithus", faction: "Both", video: "https://youtu.be/O4YnflvsaZE" },
+        { name: "Flanking Strike", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/FkmoNkbfygw" },
+        { name: "Posthaste", class: "Hunter", zone: "Thousand Needles", faction: "Both", video: "https://youtu.be/ABrKIywVlrQ" },
+        { name: "Concussive Trauma", class: "Hunter", zone: "Redridge Mountains", faction: "Both", video: "https://youtu.be/mall18M4O0Q" },
+        { name: "Beastmater’s Gambit", class: "Hunter", zone: "Feralas", faction: "Both", video: "https://youtu.be/te1GYUG9JjY" },
+        { name: "Trick Shots", class: "Hunter", zone: "The Barrens", faction: "Both", video: "https://youtu.be/w-2blbvNErM" },
+        { name: "Molten Ammo", class: "Hunter", zone: "Searing Gorge", faction: "Both", video: "https://youtu.be/j3EWO3--vH0" },
+        { name: "Marksmanship Mastery", class: "Hunter", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/uYa4s7iRvsM" },
+        { name: "Deadly Aim", class: "Hunter", zone: "Wetlands", faction: "Both", video: "https://youtu.be/tjMYVsW-X2w" },
+        { name: "Expunge", class: "Hunter", zone: "Swamp of Sorrows", faction: "Both", video: "https://youtu.be/x3E0E2_a6O0" },
+        { name: "Marked Detonation", class: "Hunter", zone: "Elwynn Forest", faction: "Alliance", video: "https://youtu.be/1WtEZ4PVtKc" },
+        { name: "Marked Detonation", class: "Hunter", zone: "The Barrens", faction: "Horde", video: "https://youtu.be/JHoNWZkZifw" },
+        { name: "Defense of the Turtle", class: "Hunter", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/X9ryFZMzUGk" },
+        { name: "Spot Weakness", class: "Hunter", zone: "Desolace", faction: "Both", video: "https://youtu.be/5B-GlRMUQaM" },
+        { name: "Power Through", class: "Hunter", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/ICodtKCEscs" },
+        { name: "Stalker’s Mark", class: "Hunter", zone: "Redridge Mountains", faction: "Both", video: "https://youtu.be/bJtCx8pHefo" },
+        { name: "Combat Rhythm", class: "Hunter", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/9FEPA0wfxnY" },
+        { name: "Lone Wolf", class: "Hunter", zone: "Elwynn Forest", faction: "Alliance", video: "https://youtu.be/GfbO2KcCz1w" },
+        { name: "Lone Wolf", class: "Hunter", zone: "Silverpine Forest", faction: "Horde", video: "https://youtu.be/GfbO2KcCz1w" },
+        { name: "Stampede", class: "Hunter", zone: "Desolace", faction: "Both", video: "https://youtu.be/4gZxOFk6nr4" },
+        { name: "Rain of Arrows", class: "Hunter", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/8l8YbhjMAzg" },
+        { name: "Joint Onslaught", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/AkZBPfiOmrg" },
+        { name: "Hunting Frenzy", class: "Hunter", zone: "Darkshore", faction: "Both", video: "https://youtu.be/MgqWnVffcts" },
+        { name: "Flare Strike", class: "Hunter", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/iQQvqg-uflo" },
+        { name: "Kindle for the Fire", class: "Hunter", zone: "Stonetalon Mountains", faction: "Both", video: "https://youtu.be/vYsmHEJt-i4" },
+        { name: "Binding Shot", class: "Hunter", zone: "Badlands", faction: "Both", video: "https://youtu.be/8RMsO4-nanI" },
+        { name: "Powershot", class: "Hunter", zone: "Hillsbrad Foothills", faction: "Both", video: "https://youtu.be/yOULbgfrs_k" },
+        { name: "Aspect of the Fox", class: "Hunter", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/Q4KpMOhp64I" },
+        { name: "Barbed Shot", class: "Hunter", zone: "Desolace", faction: "Both", video: "https://youtu.be/ndHzrkRw3J8" },
+        { name: "Explosive Charge", class: "Hunter", zone: "Burning Steppes", faction: "Both", video: "https://youtu.be/VMVSLQSqsG8" },
+
+        // ROGUE
+        { name: "Shadow of Death", class: "Rogue", zone: "Tanaris", faction: "Both", video: "https://youtu.be/zPq77kvi_SU?si=Ocn17u99g3-x2RBJ" },
+        { name: "Hazardous Escape", class: "Rogue", zone: "The Barrens", faction: "Horde", video: "https://youtu.be/hNjyYXkcVzo?si=goN7C_TB9wuKd7u3" },
+        { name: "Hazardous Escape", class: "Rogue", zone: "Loch Modan", faction: "Alliance", video: "https://youtu.be/hNjyYXkcVzo?si=goN7C_TB9wuKd7u3" },
+        { name: "Energy Surge", class: "Rogue", zone: "Ashenvale", faction: "Both", video: "https://youtu.be/2QiAlgPe18E?si=f5uzUxWDT0h-yjmh" },
+        { name: "Chasin’ the Rush", class: "Rogue", zone: "Thousand Needles", faction: "Both", video: "https://youtu.be/jW_27bHmYVU?si=q1yiuaNTmRj1FeFi" },
+        { name: "Veiled Wire", class: "Rogue", zone: "Burning Steppes", faction: "Both", video: "https://youtu.be/DrKW_j5egcM?si=ElgiMnGSfhI_PhOI" },
+        { name: "Prison Tactics", class: "Rogue", zone: "Dustwallow Marsh", faction: "Both", video: "https://youtu.be/J_kCWTlZ7UI?si=HREbaER4ALOicDEP" },
+        { name: "Venomous Edge", class: "Rogue", zone: "Un`Goro Crater", faction: "Both", video: "https://youtu.be/Wq8kJe73xdw?si=SHs0WrfxLmoposw4" },
+        { name: "Natural Energy", class: "Rogue", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/8PuJBJ0JiIA?si=LQ0evCmbU2XQI99J" },
+        { name: "No Remorse", class: "Rogue", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/M2LEROkWIs8?si=ZBspcgMkyceogUL2" },
+        { name: "From the Shadows", class: "Rogue", zone: "Burning Steppes", faction: "Both", video: "https://youtu.be/bzXeLHvWq1M?si=JNhrwmbq1-a89Y_b" },
+        { name: "Assassin’s Rush", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/G18d4pL0GeQ?si=SadJB3KkCqgjw5Jk" },
+        { name: "Sinister Finisher", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/4dpO-c8I3jM?si=NZjE83gMdAM7Ddqx" },
+        { name: "Combat Mastery", class: "Rogue", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/-qI0PnMzxZE?si=9cd3eW6dXRMJnpw2" },
+        { name: "Shadow Blades", class: "Rogue", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/_8wUqAfCna0?si=Gq6PM5Z1Nt3eHU5l" },
+        { name: "Assassination Mastery", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/MhpA3jdZ2Qo?si=VKoguZoskvB0L1PF" },
+        { name: "Subtlety Mastery", class: "Rogue", zone: "Desolace", faction: "Both", video: "https://youtu.be/3j-oU4CjiQ0?si=py7tgBXr5ecsEt0n" },
+        { name: "Recuperate", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/RuCyWU0c2ig?si=Qp5sGpTkePx2bJkB" },
+        { name: "Combat Proficiency", class: "Rogue", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/wrldo40WBDI?si=L7_5cWanAo0RhM88" },
+        { name: "Shattering Execution", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/7CAFzcDFdyQ?si=BEuDFJpq9RaW9lJL" },
+        { name: "Blood-Soaked Mutilation", class: "Rogue", zone: "Feralas", faction: "Both", video: "https://youtu.be/KIxWRI4V_eY?si=XyDJSyV1ZGSxIhxs" },
+        { name: "Murder Rush", class: "Rogue", zone: "Hillsbrad Foothills", faction: "Both", video: "https://youtu.be/ikk22DF0V1E?si=NUnklE_CHN4jvumc" },
+        { name: "Phantom Stab", class: "Rogue", zone: "Hillsbrad Foothills", faction: "Both", video: "https://youtu.be/NbjkmVdey_E?si=j7DJG5sXVc_FR56k" },
+        { name: "Phantom Stab", class: "Rogue", zone: "Duskwood", faction: "Both", video: "https://youtu.be/Zpw3tXkEh64?si=EqwaTi7cx948krKq" },
+        { name: "Repartee", class: "Rogue", zone: "Silverpine Forest", faction: "Both", video: "https://youtu.be/3GoHLgHufQk?si=Cnnel1eyp-DxoA2E" },
+        { name: "Envenomed", class: "Rogue", zone: "Westfall", faction: "Both", video: "https://youtu.be/5fKrh_-bPjk?si=Nm1ef2WTZgeCWCFH" },
+        { name: "Grappling Hook", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/1VK1XnYAIHs?si=GxdCv4G6CxkO0BQy" },
+        { name: "Dispatch", class: "Rogue", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/7jYQlK0l7lU?si=gl0wnI-WSPB30ejM" },
+        { name: "Crimson Hunger", class: "Rogue", zone: "Hillsbrad Foothills", faction: "Both", video: "https://youtu.be/h2ArqL3FjNs?si=BRoaK78fygQUaTLq" },
+        { name: "Blade Vortex", class: "Rogue", zone: "Tanaris", faction: "Both", video: "https://youtu.be/wlhEcjRo2Xw?si=uy0mMjla_38-Vayz" },
+        { name: "Bleeding Edge", class: "Rogue", zone: "Tanaris", faction: "Both", video: "https://youtu.be/wlhEcjRo2Xw?si=uy0mMjla_38-Vayz" },
+        { name: "Rush of Blood", class: "Rogue", zone: "Feralas", faction: "Both", video: "https://youtu.be/L5NlPDmQ0vk?si=ba43ZPIeQ78mX8AL" },
+        { name: "Roll the Bones", class: "Rogue", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/5An1xNfBYRA?si=-DwPfURRxqPbQwf9" },
+        { name: "Bloodshed", class: "Rogue", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/2V_yqBZ2fG8?si=Q38g4Qvqzj48DjGS" },
+        { name: "Smoke Bomb", class: "Rogue", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/WmlAMEz-nIA?si=ih0kjBwO1geY6X-3" },
+        { name: "Kingsbane", class: "Rogue", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/wvMHULNZSJ0?si=5AhetRfTodRIloYt" },
+        { name: "Combat Readiness", class: "Rogue", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/nQ8DYEfMmRc?si=0lhjdwBsBYY1x_fO" },
+        { name: "Fatal Counter", class: "Rogue", zone: "Stonetalon Mountains", faction: "Both", video: "https://youtu.be/Q8X6Y0ZyEG0?si=9cNiOSB8E05PyawV" },
+        { name: "Festering Wound", class: "Rogue", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/FTFjLtah8hM?si=4_m9yenFqd25Oq_O" },
+        { name: "Assuaging Shadows", class: "Rogue", zone: "Tanaris", faction: "Both", video: "https://youtu.be/UEDEyVi9BOs?si=NwyV5EYywkRFZxgG" },
+        { name: "Poison Bomb", class: "Rogue", zone: "Hillsbrad Foothills", faction: "Both", video: "https://youtu.be/WRLofLehXLE?si=rt7mqCt7DPXWS4ly" },
+        { name: "Methodical Approach", class: "Rogue", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/I9NI8bmwbW0?si=tJ9EObilq6je2BWp" },
+        { name: "Sinister Flurry", class: "Rogue", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/AURNReNZyaY?si=GlJqPs3My-WAK9XN" },
+        { name: "Massacre", class: "Rogue", zone: "Burning Steppes", faction: "Both", video: "https://youtu.be/DMhpOSkPIas?si=3MQUD9KHAgBHhb4V" },
+
+	// PALADIN
+        { name: "Swift Favor", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/aSgl8heB2YM?si=7XU2eeBiOHTvTr9r" },
+        { name: "Shield of Wrath", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/bJ1x1XZgInw?si=i6JCpV8O92Oe41hm" },
+        { name: "Blessed Hammer", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/iAPcAPy68dI?si=KUpsnEETuv4D4ZUR" },
+        { name: "Sacred Light", class: "Paladin", zone: "Un`Goro Crater", faction: "Both", video: "https://youtu.be/IVoCPPpSNHI?si=6FJ8v_SU-tefawoQ" },
+        { name: "Pious Strikes", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/BQ4mu7SgXbo?si=iLRRSW_RmOVuE0vo" },
+        { name: "Armor of Wrath", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/ZZJKef8RmTg?si=jZ07JxnKxGbpwfLB" },
+        { name: "Baleful Hammer", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/GpOVe1P1v3k?si=S0LOfGKUGpBpj5Ta" },
+        { name: "Protection Mastery", class: "Paladin", zone: "Feralas", faction: "Both", video: "https://youtu.be/ed7oHmQ-Evo?si=iEC_THTVDqSKx57R" },
+        { name: "Blessing of the Divines", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/pULcl7BG1eM?si=RQ_jgvLXnV6Ilm5n" },
+        { name: "Divine Reprieve", class: "Paladin", zone: "Redridge Mountains", faction: "Alliance", video: "https://youtu.be/pYFDdD3qSG0?si=8QcnGS6P66PlFVLr" },
+        { name: "Divine Reprieve", class: "Paladin", zone: "Silverpine Forest", faction: "Horde", video: "https://youtu.be/pYFDdD3qSG0?si=8QcnGS6P66PlFVLr" },
+        { name: "Fierce Vengeance", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/dpc9O27sP1U?si=yWCSb9B3XJs_hgT8" },
+        { name: "Righteous Verdict", class: "Paladin", zone: "Arathi Highlands", faction: "Alliance", video: "https://youtu.be/41Zw_XXiG5I?si=APKET7Ul26t4-g2D" },
+        { name: "Righteous Verdict", class: "Paladin", zone: "Silverpine Forest", faction: "Horde", video: "https://youtu.be/HmbR0RrCEIE?si=zA4htyQSvNPLL2IB" },
+        { name: "Wrathful Exorcism", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/DsJD_bwAG_o?si=ZQ53s4Noi12Rhurs" },
+        { name: "Synergistic Light", class: "Paladin", zone: "Wetlands", faction: "Both", video: "https://youtu.be/bg86UbEJL2E?si=izN4J0rRbrLtGpZU" },
+        { name: "Long Arm of the Law", class: "Paladin", zone: "Westfall", faction: "Both", video: "https://youtu.be/FDH1hZJZxHc?si=_Cr085_nuiF-11wV" },
+        { name: "Long Arm of the Law", class: "Paladin", zone: "Loch Modan", faction: "Both", video: "https://youtu.be/FDH1hZJZxHc?si=_Cr085_nuiF-11wV" },
+        { name: "Consecrated Weapon", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/vOgKuNMyOvA?si=vPJMeWlvSJ1gFoJk" },
+        { name: "Twist of Faith", class: "Paladin", zone: "Desolace", faction: "Both", video: "https://youtu.be/e8Hn9ULV9AY?si=aSeYNrCxfA_8hs-Q" },
+        { name: "Sword of Vengeance", class: "Paladin", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/Nw68lacS-_Q?si=26m1UMCpDoFcyLe7" },
+        { name: "Execution Verdict", class: "Paladin", zone: "Badlands", faction: "Both", video: "https://youtu.be/9t6f0h9rx0c?si=XDeuprwJCQpCSO9r" },
+        { name: "Hammerstorm", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/uB3JQaChOWg?si=0nAjPwvCSqSpyCFL" },
+        { name: "Swift Execution", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/9n7WGu7129c?si=tXTKAihQ1OxEWBCI" },
+        { name: "Divine Order", class: "Paladin", zone: "Deadwind Pass", faction: "Both", video: "https://youtu.be/vZF2IDIC-Qs?si=FFR0sz7FXlYrQKnC" },
+        { name: "Spark of Hope", class: "Paladin", zone: "Stonetalon Mountains", faction: "Both", video: "https://youtu.be/E8Jzqmy9SEQ?si=S2Hg6BnFoTHOvWQp" },
+        { name: "Guardian of Ancient Kings", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/KML3jMDrL5s?si=tHVlrLLAclhmv1ei" },
+        { name: "Divine Sacrifice", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/TvooXgY50Ug?si=r9E5PxCrqolnp2Cl" },
+        { name: "Light of Dawn", class: "Paladin", zone: "Thousand Needles", faction: "Both", video: "https://youtu.be/vh44Hlrcc6s?si=qNnPp2EByLTLU95C" },
+        { name: "A New Dawn", class: "Paladin", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/FXIU9y3g2mk?si=FIwpS1BLFHrJ9P1o" },
+        { name: "Light of the Guardian", class: "Paladin", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/nlJ1Fwl2NIg?si=A5Nbo4mFph6UyfOS" },
+        { name: "Crusader of Light", class: "Paladin", zone: "Westfall", faction: "Both", video: "https://youtu.be/nAMUjCZecn8?si=cvAmPKjW4iKxIWfh" },
+        { name: "Divine Resurgence", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/mCie5pkF2e8?si=3BblJkARcqtJXmU0" },
+        { name: "Retribution Mastery", class: "Paladin", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/eYmjQafnBIk?si=ieTu_AFfaFa8svcU" },
+        { name: "Light’s Hammer", class: "Paladin", zone: "Silithus", faction: "Both", video: "https://youtu.be/DPcncMX1T8Q?si=aeb_SZffMU5h9k_G" },
+        { name: "Beacon of Virtue", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/g2X5-hB5KfQ?si=wer8yMUBzE0BDp_m" },
+        { name: "Execution Sentence", class: "Paladin", zone: "Hillsbrad Foothills", faction: "Both", video: "https://youtu.be/3gmMKPzZ6CM?si=SZA7KZIm9V2pjYAl" },
+        { name: "Crusader’s Judgement", class: "Paladin", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/90b4tfH_Kuc?si=TRN4Cp89MSakYjLg" },
+        { name: "Holy Mastery", class: "Paladin", zone: "Dustwallow Marsh", faction: "Both", video: "https://youtu.be/L4CESFcjMAw?si=izBjBh3b-QvuHymX" },
+        { name: "Divine Steed", class: "Paladin", zone: "Badlands", faction: "Both", video: "https://youtu.be/FVlR1OihM3E?si=eaI0Jt4raJPCNjIY" },
+        { name: "Holy Templar", class: "Paladin", zone: "Desolace", faction: "Both", video: "https://youtu.be/m7zlRt3pU_s?si=PIWFGcZbcMB-y37w" },
+        { name: "Blinding Light", class: "Paladin", zone: "Tanaris", faction: "Both", video: "https://youtu.be/v5C_4FApHLU?si=P5LnfV1uniSILc9y" },
+        { name: "Swift Avenger", class: "Paladin", zone: "Winterspring", faction: "Both", video: "https://youtu.be/JQ5EKuW3xWw?si=4vY7wsuhyyWvkQJZ" },
+        { name: "Branding Zeal", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/ZN6DZPKS_5w?si=kP5q5aBNHE6LiS04" },
+        { name: "Consecrated Zeal", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/Az-QYQUbRJ0?si=0LETVFuA8xxGJEMp" },
+        { name: "One with the Light", class: "Paladin", zone: "Dun Morogh", faction: "Alliance", video: "https://youtu.be/gFRD4kmnn30?si=aTwHN_cXyT6mwCS5" },
+        { name: "One with the Light", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/gFRD4kmnn30?si=aTwHN_cXyT6mwCS5" },
+
+	// WARRIOR
+        { name: "Victorious", class: "Warrior", zone: "The Barrens", faction: "Both", video: "https://youtu.be/-WU5IGGPeTU?si=cjdkdibIUrr6dUZp" },
+        { name: "Seismic Shockwave", class: "Warrior", zone: "Azshara", faction: "Both", video: "https://youtu.be/o_BWEiQmHt4?si=TeEoHP_IwNaVg5NA" },
+        { name: "Revengeful Block", class: "Warrior", zone: "Redridge Mountains", faction: "Alliance", video: "https://youtu.be/0WvIZG2kpkQ?si=RYfPinJNfi10pHWn" },
+        { name: "Revengeful Block", class: "Warrior", zone: "The Barrens", faction: "Horde", video: "https://youtu.be/0WvIZG2kpkQ?si=RYfPinJNfi10pHWn" },
+        { name: "Insatiable", class: "Warrior", zone: "Western Plaguelands", faction: "Both", video: "https://youtu.be/1Huy1ViY-08?si=3elriQ75cKyDRFek" },
+        { name: "Jab Cross", class: "Warrior", zone: "Searing Gorge", faction: "Both", video: "https://youtu.be/armUGw5gpyE?si=0tjYtlyaLjJNY54i" },
+        { name: "Skull Crusher", class: "Warrior", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/Hi9BlbKLXuo?si=j1MsNQpKxGGnZrel" },
+        { name: "War Banner", class: "Warrior", zone: "Desolace", faction: "Both", video: "https://youtu.be/Gr_45ehZMZg?si=VJc0EqRhx0jKJjqP" },
+        { name: "Devastating Blademaster", class: "Warrior", zone: "Silithus", faction: "Both", video: "https://youtu.be/lUVZTKhCdUE?si=WiSKjjxWJz4X-z79" },
+        { name: "SiegeBreaker", class: "Warrior", zone: "Alterac Mountains", faction: "Both", video: "https://youtu.be/eaOSiaJz7to?si=MAhgR6mqjcYyFAyV" },
+        { name: "Shield Finesse", class: "Warrior", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/WD9ueUhjDao?si=hr5AQMfQlqaycDFj" },
+        { name: "Counterpoise", class: "Warrior", zone: "The Barrens", faction: "Both", video: "https://youtu.be/azFFXpGhpcc?si=kVrVx6yOKC0p9unX" },
+        { name: "Roar of Dread", class: "Warrior", zone: "Swamp of Sorrows", faction: "Both", video: "https://youtu.be/Zx9xyWUw9Q8?si=Ncj1wZmVFV94_qzh" },
+        { name: "Victorious Stand", class: "Warrior", zone: "Silithus", faction: "Both", video: "https://youtu.be/8UyU6sgBi0E?si=VVs3Q8Rq_IRhpWIC" },
+        { name: "Throwing Mastery", class: "Warrior", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/ncWo0jekvNk?si=ItAZkPnG9ksGOkuy" },
+        { name: "Outrage", class: "Warrior", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/874MeGXyEC0?si=vKwd__LozUk7VRd2" },
+        { name: "Arms Mastery", class: "Warrior", zone: "Blasted Lands", faction: "Both", video: "https://youtu.be/nSogYdp_qoE?si=-TyGbLQq33Zkm7lh" },
+        { name: "Blades of Blood", class: "Warrior", zone: "Dustwallow Marsh", faction: "Both", video: "https://youtu.be/x4JHzAtKIxk?si=6KJHtM1b7zQEjcU4" },
+        { name: "Bloodthirsty", class: "Warrior", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/VuPHkG7jENc?si=0Ocq7kU0oAfvRfuK" },
+        { name: "Onslaught", class: "Warrior", zone: "Burning Steppes", faction: "Both", video: "https://youtu.be/LbLjWX8ZY0k?si=KD-enOwkuA9YCI7e" },
+        { name: "Raging Onslaught", class: "Warrior", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/d9jIifcvj7c?si=EzFjrb5CKh0_KbjC" },
+        { name: "Wingman", class: "Warrior", zone: "Arathi Highlands", faction: "Both", video: "https://youtu.be/1Kp1IcoS2uw?si=QHSoGA84jaWfHUg7" },
+        { name: "Battering Ram", class: "Warrior", zone: "Blasted Lands", faction: "Both", video: "https://youtu.be/2Bfjdfkuwjc?si=CI1jPQNnw5B3mb0J" },
+        { name: "Heavy Thunder", class: "Warrior", zone: "Wetlands", faction: "Both", video: "https://youtu.be/GlhMmPTchqQ?si=0oUk6C0TdVvZy8Wx" },
+        { name: "Enduring Aegis", class: "Warrior", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/JaFLNeyXSNw?si=U133aEp1WT3nUr8v" },
+        { name: "Shield Master’s Resolve", class: "Warrior", zone: "Felwood", faction: "Both", video: "https://youtu.be/l7hWF5h99sI?si=DFN_vRKwZ7MJ8L_K" },
+        { name: "Going for the Kill", class: "Warrior", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/EdbzmQpDvVk?si=TPC-fDQ1-Z6QZjzc" },
+        { name: "Ravager", class: "Warrior", zone: "Tanaris", faction: "Both", video: "https://youtu.be/s39v8xx3-Wo?si=yJnUeMveb1cungtu" },
+        { name: "A Quick Death", class: "Warrior", zone: "Tanaris", faction: "Both", video: "https://youtu.be/LdCxdr6VXzI?si=3t1_zB9np9htpCwN" },
+        { name: "Titan’s Fury", class: "Warrior", zone: "Un`Goro Crater", faction: "Both", video: "https://youtu.be/tswpy1GI3eU?si=ma92FVBm6x-9iCO7" },
+        { name: "Heavyweight", class: "Warrior", zone: "Stranglethorn Vale", faction: "Both", video: "https://youtu.be/onojGjbQsh0?si=50IJrN4P-lk1yHnZ" },
+        { name: "Heavyweight", class: "Warrior", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=7xigqh9sleQ" },
+        { name: "Blood and Thunder", class: "Warrior", zone: "Durotar", faction: "Horde", video: "https://www.youtube.com/watch?v=ZUj-nYSlOKw" },
+        { name: "Blood and Thunder", class: "Warrior", zone: "The Barrens", faction: "Horde", video: "https://www.youtube.com/watch?v=lpAqLONJQuI" },
+        { name: "Blood and Thunder", class: "Warrior", zone: "Westfall", faction: "Alliance", video: "https://www.youtube.com/watch?v=lpAqLONJQuI" },
+        { name: "Raging Blow", class: "Warrior", zone: "Blasted Lands", faction: "Both", video: "https://www.youtube.com/watch?v=vyKu6GwXbUM" },
+        { name: "Cleaving Slam", class: "Warrior", zone: "Wetlands", faction: "Both", video: "https://www.youtube.com/watch?v=jJYSX7bfB30" },
+        { name: "Revitalizing Revenge", class: "Warrior", zone: "Eastern Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=Bx2WRgrjo_E" },
+        { name: "Fury Mastery", class: "Warrior", zone: "Blasted Lands", faction: "Both", video: "https://www.youtube.com/watch?v=zQ2fkJA_jVk" },
+        { name: "Master of Arms", class: "Warrior", zone: "The Hinterlands", faction: "Both", video: "https://www.youtube.com/watch?v=d2lrW5r73dQ" },
+        { name: "Gladiator Stance", class: "Warrior", zone: "Stanglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=BhU86bx5_A8" },
+        { name: "Brutal Execution", class: "Warrior", zone: "Duskwood", faction: "Both", video: "https://www.youtube.com/watch?v=bHIJJ2eWLvs" },
+        { name: "Bloodbath", class: "Warrior", zone: "Tanaris", faction: "Both", video: "https://www.youtube.com/watch?v=aU_PVe6kSfk" },
+        { name: "Here Comes the Big One", class: "Warrior", zone: "The Hinterlands", faction: "Both", video: "https://www.youtube.com/watch?v=u5bjJsOahXw" },
+        { name: "Cracklin Thunder", class: "Warrior", zone: "Westfall", faction: "Alliance", video: "https://www.youtube.com/watch?v=kY9oDGzgnM8" },
+        { name: "Crackling Thunder", class: "Warrior", zone: "The Barrens", faction: "Horde", video: "https://www.youtube.com/watch?v=3u6iNyiWPvM" },
+        { name: "Dragon Roar", class: "Warrior", zone: "Swamp of Sorrows", faction: "Both", video: "https://www.youtube.com/watch?v=Jeaa8CJ5FYM" },
+        { name: "Dragon Warrior", class: "Warrior", zone: "Swamp of Sorrows", faction: "Both", video: "https://www.youtube.com/watch?v=Jeaa8CJ5FYM" },
+        { name: "Bulwark", class: "Warrior", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=m7FEesBnKL4" },
+        { name: "Sword and Thunder", class: "Warrior", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=Q8X6Y0ZyEG0" },
+        { name: "Avatar", class: "Warrior", zone: "Alterac Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=w3MN0aH0d1c" },
+        { name: "Controlled Aggression", class: "Warrior", zone: "Burning Steppes", faction: "Both", video: "https://www.youtube.com/watch?v=eWdw1emRz7c" },
+        { name: "Colossus Smash", class: "Warrior", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=4smn5qEKxGg" },
+        { name: "Protection Mastery", class: "Warrior", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=_Wl2kOjhdwk" },
+        { name: "Stormhammer", class: "Warrior", zone: "Burning Steppes", faction: "Both", video: "https://www.youtube.com/watch?v=jAztfzL9kFk" },
+        { name: "Heroic Leap", class: "Warrior", zone: "Un`Goro Crater", faction: "Both", video: "https://www.youtube.com/watch?v=AKeqZKe6-RI" },
+    ];
+
+    let collectedNames = JSON.parse(localStorage.getItem('ascension_save_v1')) || [];
+    let currentClass = "all";
+    let currentRegion = "all";
+    let currentFaction = "Both";
+    let sortKey = 'zone'; 
+    let sortOrder = 1;
+
+    function renderTable() {
+        const body = document.getElementById('reBody');
+        const searchInput = document.getElementById('searchInput');
+        const search = searchInput ? searchInput.value.toLowerCase() : "";
+        const hideChecked = document.getElementById('hideCollected').checked;
+
+        const factionPool = enchants.filter(e => currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction);
+        
+        updateProgress(factionPool);
+        updateSortIcons();
+
+        let filtered = factionPool.filter(e => {
+            const matchesSearch = e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search);
+            const matchesClass = currentClass === "all" || e.class === currentClass;
+            const matchesZone = currentRegion === "all" || e.zone === currentRegion;
+            const isColl = collectedNames.includes(e.name.toLowerCase());
+            return matchesSearch && matchesClass && matchesZone && (!hideChecked || !isColl);
+        });
+
+        filtered.sort((a, b) => {
+            const isA = collectedNames.includes(a.name.toLowerCase());
+            const isB = collectedNames.includes(b.name.toLowerCase());
+            if (isA !== isB) return isA ? 1 : -1;
+            let valA = String(a[sortKey]).toLowerCase();
+            let valB = String(b[sortKey]).toLowerCase();
+            if (valA < valB) return -1 * sortOrder;
+            if (valA > valB) return 1 * sortOrder;
+            return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        });
+
+        body.innerHTML = "";
+        filtered.forEach(e => {
+            const isColl = collectedNames.includes(e.name.toLowerCase());
+            const row = document.createElement('tr');
+            if (isColl) row.className = 'collected';
+            row.innerHTML = `
+                <td class="action-cell col-collect">
+                    <button class="btn-action ${isColl ? 'btn-remove' : 'btn-collect'}" onclick="toggleRE('${e.name.toLowerCase()}', ${!isColl})">
+                        ${isColl ? '✕' : '✓'}
+                    </button>
+                </td>
+                <td style="font-weight:600">${e.name}</td>
+                <td><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[e.class]}.jpg" class="icon-class">${e.class}</td>
+                <td style="width:100px;">${e.faction === "Both" ? `<img src="${icons.alliance}" class="fac-icon"><img src="${icons.horde}" class="fac-icon">` : `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`}</td>
+                <td style="color:var(--text-dim)">${e.zone}</td>
+                <td style="width:100px; text-align:center">${e.video ? `<a href="${e.video}" target="_blank" class="btn-video">WATCH</a>` : '—'}</td>
+            `;
+            body.appendChild(row);
+        });
+        updateRegionDropdown(factionPool);
+    }
+
+    function handleSearchInput() {
+        const val = document.getElementById('searchInput').value;
+        document.getElementById('clearSearch').style.display = val.length > 0 ? 'flex' : 'none';
+        renderTable();
+    }
+
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('clearSearch').style.display = 'none';
+        renderTable();
+    }
+
+    function toggleDropdown(e, id) {
+        e.stopPropagation();
+        const list = document.getElementById(id);
+        const isOpen = list.classList.contains('show');
+        document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
+        if (!isOpen) list.classList.add('show');
+    }
+
+    function selectClass(c) {
+        currentClass = c;
+        const dispText = document.getElementById('classDisplayText');
+        const dispIcon = document.getElementById('classDisplayIcon');
+        if (c === 'all') { dispText.innerText = 'All Classes'; dispIcon.style.display = 'none'; }
+        else { dispText.innerText = c; dispIcon.src = `https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg`; dispIcon.style.display = 'inline-block'; }
+        renderTable();
+    }
+
+    function selectRegion(r) {
+        currentRegion = r;
+        document.getElementById('regionDisplayText').innerText = r === 'all' ? 'All Regions' : r;
+        renderTable();
+    }
+
+    function updateRegionDropdown(pool) {
+        const container = document.getElementById('regionOptions');
+        const zones = [...new Set(pool.map(e => e.zone))].sort();
+        let html = `<div class="option-item" onclick="selectRegion('all')">All Regions</div>`;
+        zones.forEach(z => {
+            html += `<div class="option-item" onclick="selectRegion('${z}')">${z}</div>`;
+        });
+        container.innerHTML = html;
+        if (currentRegion !== 'all' && !zones.includes(currentRegion)) {
+            currentRegion = 'all';
+            document.getElementById('regionDisplayText').innerText = 'All Regions';
+        }
+    }
+
+    function setSort(key) {
+        if (sortKey === key) sortOrder *= -1;
+        else { sortKey = key; sortOrder = 1; }
+        renderTable();
+    }
+
+    function updateSortIcons() {
+        ['name', 'class', 'zone'].forEach(key => {
+            const el = document.getElementById(`sort-${key}`);
+            if (el) el.innerText = sortKey === key ? (sortOrder === 1 ? " ▲" : " ▼") : "";
+        });
+    }
+
+    function setFaction(f) {
+        currentFaction = f;
+        document.querySelectorAll('.fac-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(f === 'Both' ? 'fac-both' : `fac-${f.toLowerCase()}`).classList.add('active');
+        renderTable();
+    }
+
+    function toggleRE(name, shouldAdd) {
+        if (shouldAdd) { if (!collectedNames.includes(name)) collectedNames.push(name); }
+        else { collectedNames = collectedNames.filter(n => n !== name); }
+        renderTable();
+    }
+
+    function updateProgress(pool) {
+        const calc = (p) => {
+            const uniq = [...new Set(p.map(e => e.name.toLowerCase()))];
+            return [uniq.filter(n => collectedNames.includes(n)).length, uniq.length];
+        };
+        
+        const [gD, gT] = calc(pool); 
+        updateBar('global', gD, gT);
+        
+        // Update Class Bar + Dynamic Title
+        const classTitle = currentClass === 'all' ? 'Class Progress' : `${currentClass} Progress`;
+        document.getElementById('classProgressLabel').innerText = classTitle;
+        const [cD, cT] = calc(pool.filter(e => currentClass === 'all' || e.class === currentClass)); 
+        updateBar('class', cD, cT);
+        
+        // Update Region Bar + Dynamic Title
+        const regionTitle = currentRegion === 'all' ? 'Region Progress' : `${currentRegion} Progress`;
+        document.getElementById('regionProgressLabel').innerText = regionTitle;
+        const [zD, zT] = calc(pool.filter(e => currentRegion === 'all' || e.zone === currentRegion)); 
+        updateBar('region', zD, zT);
+    }
+
+    function updateBar(id, val, max) {
+        const perc = max === 0 ? 0 : (val / max) * 100;
+        document.getElementById(`${id}Fill`).style.width = `${perc}%`;
+        document.getElementById(`${id}Text`).innerText = `${val}/${max}`;
+    }
+
+    function bulkAction(check) {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        enchants.forEach(e => {
+            if ((currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction) && (currentClass === "all" || e.class === currentClass) && (currentRegion === "all" || e.zone === currentRegion) && (e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search))) {
+                const name = e.name.toLowerCase();
+                if (check && !collectedNames.includes(name)) collectedNames.push(name);
+                else if (!check) collectedNames = collectedNames.filter(n => n !== name);
+            }
+        });
+        renderTable();
+    }
+
+    function exportData() { localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames)); alert("Saved!"); }
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => { collectedNames = JSON.parse(e.target.result); renderTable(); };
+        reader.readAsText(file);
+    }
+
+    function initClassOptions() {
+        const container = document.getElementById('classOptions');
+        let html = `<div class="option-item" onclick="selectClass('all')">All Classes</div>`;
+        Object.keys(classData).sort().forEach(c => {
+            html += `<div class="option-item" onclick="selectClass('${c}')"><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg" class="icon-class"> ${c}</div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
+    });
+
+    initClassOptions();
+    renderTable();
+</script>
+
+</body>
+</html>	
