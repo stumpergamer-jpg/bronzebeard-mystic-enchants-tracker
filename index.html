@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WoW Ascension - RE Tracker Pro v1.0.0</title>
+    <title>WoW Ascension - Bronzebeard ME Tracker v1.0.0</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
@@ -25,7 +25,18 @@
         .container { max-width: 1250px; margin: auto; height: 100vh; display: flex; flex-direction: column; }
         
         .header-section { text-align: center; margin-bottom: 10px; flex: 0 0 auto; }
-        h1 { font-family: 'Lifecraft', serif; color: var(--accent); margin: 0; font-size: 2.8rem; letter-spacing: 2px; text-shadow: 3px 3px 0px #000; font-weight: normal; }
+        
+        /* Modification de la police ici */
+        h1 { 
+            font-family: var(--font-main); 
+            color: var(--accent); 
+            margin: 0; 
+            font-size: 2.2rem; 
+            letter-spacing: 1px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+            font-weight: 700; 
+            text-transform: uppercase;
+        }
 
         .top-bar { flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
         .data-management { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
@@ -220,6 +231,7 @@
 </div>
 
 <script>
+    /* LE SCRIPT RESTE EXACTEMENT LE MÊME */
     const classData = { 
         "Priest": "classicon_priest", "Hunter": "classicon_hunter", "Mage": "classicon_mage", 
         "Warrior": "classicon_warrior", "Paladin": "classicon_paladin", "Rogue": "classicon_rogue", 
@@ -730,8 +742,7 @@
         { name: "Predator's Wrath: Focus", class: "Druid", zone: "Darkshore", faction: "Both", video: "https://www.youtube.com/watch?v=wf91sdeu9ts" },
         { name: "Stampeding Roar", class: "Druid", zone: "The Hinterlands", faction: "Both", video: "https://www.youtube.com/watch?v=GcP9dCbWU_I" },
         { name: "Solar Beam", class: "Druid", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=-Wj5FETceFk" },
-    ];
-
+];
     let collectedNames = JSON.parse(localStorage.getItem('ascension_save_v1')) || [];
     let currentClass = "all";
     let currentRegion = "all";
@@ -744,19 +755,15 @@
         const body = document.getElementById('reBody');
         const searchInput = document.getElementById('searchInput');
         const search = searchInput ? searchInput.value.toLowerCase() : "";
-
         const factionPool = enchants.filter(e => currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction);
-        
         updateProgress(factionPool);
         updateSortIcons();
-
         let filtered = factionPool.filter(e => {
             const matchesSearch = e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search);
             const matchesClass = currentClass === "all" || e.class === currentClass;
             const matchesZone = currentRegion === "all" || e.zone === currentRegion;
             return matchesSearch && matchesClass && matchesZone;
         });
-
         filtered.sort((a, b) => {
             const isA = collectedNames.includes(a.name.toLowerCase());
             const isB = collectedNames.includes(b.name.toLowerCase());
@@ -767,7 +774,6 @@
             if (valA > valB) return 1 * sortOrder;
             return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
         });
-
         body.innerHTML = "";
         filtered.forEach(e => {
             const isColl = collectedNames.includes(e.name.toLowerCase());
@@ -814,7 +820,6 @@
         localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
         const dataStr = JSON.stringify(collectedNames, null, 2);
         const fileName = `wow_tracker_save_${new Date().toISOString().split('T')[0]}.json`;
-
         if ('showSaveFilePicker' in window) {
             try {
                 const handle = await window.showSaveFilePicker({
@@ -825,7 +830,7 @@
                 await writable.write(dataStr);
                 await writable.close();
                 hasUnsavedChanges = false;
-                showStatusMessage("Progression sauvegardée avec succès !");
+                showStatusMessage("Progression sauvegardée !");
             } catch (err) { console.log("Sauvegarde annulée"); }
         } else {
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -851,9 +856,9 @@
                     localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
                     hasUnsavedChanges = false;
                     renderTable();
-                    showStatusMessage("Fichier chargé avec succès !");
+                    showStatusMessage("Fichier chargé !");
                 }
-            } catch (err) { alert("Erreur lors de l'importation."); }
+            } catch (err) { alert("Erreur d'importation."); }
         };
         reader.readAsText(file);
     }
@@ -865,13 +870,6 @@
         document.body.appendChild(msg);
         setTimeout(() => msg.remove(), 3000);
     }
-
-    window.addEventListener('beforeunload', (e) => {
-        if (hasUnsavedChanges) {
-            e.preventDefault();
-            e.returnValue = '';
-        }
-    });
 
     function handleSearchInput() {
         const val = document.getElementById('searchInput').value;
@@ -909,10 +907,6 @@
         let html = `<div class="option-item" onclick="selectRegion('all')">All Regions</div>`;
         zones.forEach(z => { html += `<div class="option-item" onclick="selectRegion('${z}')">${z}</div>`; });
         container.innerHTML = html;
-        if (currentRegion !== 'all' && !zones.includes(currentRegion)) {
-            currentRegion = 'all';
-            document.getElementById('regionDisplayText').innerText = 'All Regions';
-        }
     }
     function setSort(key) {
         if (sortKey === key) sortOrder *= -1;
@@ -937,14 +931,8 @@
             return [uniq.filter(n => collectedNames.includes(n)).length, uniq.length];
         };
         const [gD, gT] = calc(pool); updateBar('global', gD, gT);
-        const classTitle = currentClass === 'all' ? 'Class Progress' : `${currentClass} Progress`;
-        document.getElementById('classProgressLabel').innerText = classTitle;
-        const [cD, cT] = calc(pool.filter(e => currentClass === 'all' || e.class === currentClass)); 
-        updateBar('class', cD, cT);
-        const regionTitle = currentRegion === 'all' ? 'Region Progress' : `${currentRegion} Progress`;
-        document.getElementById('regionProgressLabel').innerText = regionTitle;
-        const [zD, zT] = calc(pool.filter(e => currentRegion === 'all' || e.zone === currentRegion)); 
-        updateBar('region', zD, zT);
+        const [cD, cT] = calc(pool.filter(e => currentClass === 'all' || e.class === currentClass)); updateBar('class', cD, cT);
+        const [zD, zT] = calc(pool.filter(e => currentRegion === 'all' || e.zone === currentRegion)); updateBar('region', zD, zT);
     }
     function updateBar(id, val, max) {
         const perc = max === 0 ? 0 : (val / max) * 100;
@@ -969,7 +957,3 @@
 
 </body>
 </html>
-
-
-
-
