@@ -7,11 +7,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-        @font-face {
-            font-family: 'Lifecraft';
-            src: url('https://db.onlinewebfonts.com/t/790327f4740e6c6052733979727f712f.woff2') format('woff2');
-        }
-
         :root {
             --bg-dark: #0f0f0f; --card-bg: #1a1a1a; --accent: #f8b700;
             --text-main: #e0e0e0; --text-dim: #a0a0a0; --border: #333; 
@@ -26,7 +21,6 @@
         
         .header-section { text-align: center; margin-bottom: 10px; flex: 0 0 auto; }
         
-        /* Modification de la police ici */
         h1 { 
             font-family: var(--font-main); 
             color: var(--accent); 
@@ -226,12 +220,11 @@
     </div>
 
     <footer>
-        <p>Version 1.0.0 • Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> for the locations data</p>
+        <p>Version 1.0.0 • Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> and <a href="https://www.youtube.com/@WhiterBronzebeard" class="credits-link">WhiterBronzebeard</a> for the locations data</p>
     </footer>
 </div>
 
 <script>
-    /* LE SCRIPT RESTE EXACTEMENT LE MÊME */
     const classData = { 
         "Priest": "classicon_priest", "Hunter": "classicon_hunter", "Mage": "classicon_mage", 
         "Warrior": "classicon_warrior", "Paladin": "classicon_paladin", "Rogue": "classicon_rogue", 
@@ -619,7 +612,7 @@
         { name: "Shimmer", class: "Mage", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=hJEwsQ8Wq3o" },
 
 // SHAMAN
-		{ name: "Tethered Power", class: "Shaman", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=M_eqCs-akuA" },
+	{ name: "Tethered Power", class: "Shaman", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=M_eqCs-akuA" },
         { name: "Primal Tide", class: "Shaman", zone: "Dustwallow Marsh", faction: "Both", video: "https://www.youtube.com/watch?v=u3FAUrZeSdg" },
         { name: "Molten Outburst", class: "Shaman", zone: "Searing Gorge", faction: "Both", video: "https://www.youtube.com/watch?v=6Vj6LKuQ8PM" },
         { name: "Lightning Fangs", class: "Shaman", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=uSv0laTfa68" },
@@ -679,7 +672,7 @@
         { name: "Spreading Tides", class: "Shaman", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=bQ26jaaC-1Q" },
 		
 // DRUID
-		{ name: "Razor-Sharp Claws", class: "Druid", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=oVcg8kWiDUc" },
+	{ name: "Razor-Sharp Claws", class: "Druid", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=oVcg8kWiDUc" },
         { name: "Nature's Synthesis", class: "Druid", zone: "Swamp of Sorrows", faction: "Both", video: "https://www.youtube.com/watch?v=gzCj95bsuV8" },
         { name: "Languish", class: "Druid", zone: "Silithus", faction: "Both", video: "https://www.youtube.com/watch?v=_jV951Eh77E" },
         { name: "Shifting Bark", class: "Druid", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=RVdRf2KFYTw" },
@@ -751,6 +744,14 @@
     let sortOrder = 1;
     let hasUnsavedChanges = false;
 
+    // --- DETECTION FERMETURE ---
+    window.addEventListener('beforeunload', (e) => {
+        if (hasUnsavedChanges) {
+            e.preventDefault();
+            e.returnValue = ''; 
+        }
+    });
+
     function renderTable() {
         const body = document.getElementById('reBody');
         const searchInput = document.getElementById('searchInput');
@@ -820,7 +821,8 @@
         localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
         const dataStr = JSON.stringify(collectedNames, null, 2);
         const fileName = `wow_tracker_save_${new Date().toISOString().split('T')[0]}.json`;
-        if ('showSaveFilePicker' in window) {
+        
+        if (window.showSaveFilePicker) {
             try {
                 const handle = await window.showSaveFilePicker({
                     suggestedName: fileName,
