@@ -3,6 +3,7 @@ This tool is still under development so feel free to put a star on this tool, tr
 
 In order to use it : 
 1) Download the index.html file anywhere on your PC
+   OR
 2) Click this link to use it in an explorer version : [Mystic Enchants Tracker](https://stumpergamer-jpg.github.io/bronzebeard-mystic-enchants-tracker/)
 
 Don't forget to click the "save" button to keep your collection progress !
