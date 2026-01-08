@@ -7,6 +7,6 @@ In order to use it :
 
 Don't forget to click the "save" button to keep your collection progress !
 
-Big shout-out to the youtuber [@shadowmeldgg](https://www.youtube.com/@shadowmeldgg) for his wonderful work in gathering and sharing the locations of those Mystic Enchants !
+Big shout-out to the youtubers [@shadowmeldgg](https://www.youtube.com/@shadowmeldgg) and [@WhiterBronzebeard](https://www.youtube.com/@WhiterBronzebeard) for their wonderful work in gathering and sharing the locations of those Mystic Enchants !
 
 Stumper_Gaming
