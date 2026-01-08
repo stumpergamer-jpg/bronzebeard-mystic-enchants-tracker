@@ -16,10 +16,11 @@
         }
 
         * { box-sizing: border-box; }
-        body { font-family: var(--font-main); background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 10px; line-height: 1.4; overflow: hidden; }
-        .container { max-width: 1250px; margin: auto; height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: var(--font-main); background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 10px; line-height: 1.4; }
         
-        .header-section { text-align: center; margin-bottom: 10px; flex: 0 0 auto; }
+        .container { max-width: 1250px; margin: auto; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .header-section { text-align: center; margin-bottom: 15px; flex: 0 0 auto; }
         
         h1 { 
             font-family: var(--font-main); 
@@ -32,9 +33,15 @@
             text-transform: uppercase;
         }
 
+        .credits-header {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
         .top-bar { flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
         .data-management { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .data-group { display: flex; gap: 8px; align-items: center; }
+        .data-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         
         label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
@@ -55,7 +62,7 @@
         }
         #clearSearch:hover { background: var(--danger); color: white; }
 
-        .dropdown-group { flex: 1; position: relative; }
+        .dropdown-group { flex: 1; position: relative; min-width: 150px; }
         .custom-select { 
             font-family: var(--font-main); background-color: var(--input-bg); border: 1px solid var(--border); 
             color: white; font-size: 0.85rem; border-radius: 6px; height: 36px; padding: 0 10px; 
@@ -80,12 +87,10 @@
         .progress-bar-bg { background: #111; height: 8px; border-radius: 4px; border: 1px solid #333; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #b8860b, var(--accent)); transition: width 0.5s; }
 
-        .table-wrapper { flex: 1 1 auto; overflow: hidden; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); display: flex; flex-direction: column; }
-        table { width: 100%; border-collapse: collapse; display: flex; flex-direction: column; height: 100%; }
-        thead { flex: 0 0 auto; background: #252525; display: table; width: 100%; table-layout: fixed; }
-        tbody { flex: 1 1 auto; display: block; overflow-y: scroll; width: 100%; }
-        tr { display: table; width: 100%; table-layout: fixed; }
+        .table-wrapper { flex: 1 1 auto; overflow-x: auto; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); display: flex; flex-direction: column; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; } 
         
+        thead { background: #252525; }
         th { padding: 12px; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; border-bottom: 2px solid var(--border); text-align: left; cursor: pointer; user-select: none; }
         th:hover { background: #333; }
         .col-collect { width: 80px; text-align: center; font-size: 0.65rem; }
@@ -114,8 +119,15 @@
         .fac-btn.active.horde { background: var(--horde); color: white; }
         .fac-icon { width: 16px; height: 16px; object-fit: contain; }
 
-        tbody::-webkit-scrollbar, .options-list::-webkit-scrollbar { width: 8px; }
-        tbody::-webkit-scrollbar-thumb, .options-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5rem; }
+            .progress-section { grid-template-columns: 1fr; gap: 10px; }
+            .data-management { justify-content: center; }
+            .data-group { justify-content: center; width: 100%; }
+            .dropdown-group { width: 100%; }
+            .top-bar { padding: 8px; }
+            .credits-header { font-size: 0.75rem; }
+        }
 
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translate(-50%, -20px); }
@@ -130,6 +142,9 @@
 <div class="container">
     <div class="header-section">
         <h1>Mystic Enchants Tracker</h1>
+        <div class="credits-header">
+            Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> and <a href="https://www.youtube.com/@WhiterBronzebeard" target="_blank" class="credits-link">WhiterBronzebeard</a> for the locations data and tutorial.
+        </div>
     </div>
 
     <div class="top-bar">
@@ -210,7 +225,7 @@
                     <th class="col-collect">Collect</th>
                     <th onclick="setSort('name')">Enchant <span id="sort-name" class="sort-icon"></span></th>
                     <th onclick="setSort('class')">Class <span id="sort-class" class="sort-icon"></span></th>
-                    <th style="width:100px;">Faction</th>
+                    <th style="width:100px;" onclick="setSort('faction')">Faction <span id="sort-faction" class="sort-icon"></span></th>
                     <th onclick="setSort('zone')">Location <span id="sort-zone" class="sort-icon"></span></th>
                     <th style="width: 100px; text-align:center;">Video</th>
                 </tr>
@@ -220,7 +235,7 @@
     </div>
 
     <footer>
-        <p>Version 1.0.0 • Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> and <a href="https://www.youtube.com/@WhiterBronzebeard" class="credits-link">WhiterBronzebeard</a> for the locations data</p>
+        <p>Version 1.0.0</p>
     </footer>
 </div>
 
@@ -553,13 +568,14 @@
         { name: "Gul'Dan's Chosen", class: "Warlock", zone: "Felwood", faction: "Both", video: "https://www.youtube.com/watch?v=grbb9OBtx00" },
 
 // MAGE
-	    { name: "Glacial Cascade", class: "Mage", zone: "Duskwood", faction: "Both", video: "https://www.youtube.com/watch?v=y5VrqOsioUA" },
+	{ name: "Glacial Cascade", class: "Mage", zone: "Duskwood", faction: "Both", video: "https://www.youtube.com/watch?v=y5VrqOsioUA" },
         { name: "Glacial Cascade", class: "Mage", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=y5VrqOsioUA" },
+	{ name: "Glacial Cascade", class: "Mage", zone: "Redridge Mountains", faction: "Alliance", video: "https://www.youtube.com/watch?v=y5VrqOsioUA" },
         { name: "Fire Fire Fireball", class: "Mage", zone: "The Barrens", faction: "Horde", video: "https://www.youtube.com/watch?v=0W6uSrc86RI" },
         { name: "Fire Fire Fireball", class: "Mage", zone: "Westfall", faction: "Alliance", video: "https://www.youtube.com/watch?v=iAKq_g56xSk" },
         { name: "Precision Impact", class: "Mage", zone: "Burning Steppes", faction: "Both", video: "https://www.youtube.com/watch?v=blL5wMGFJwM" },
         { name: "Power Overwhelming", class: "Mage", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=-zAEYVS3KTE" },
-        { name: "Fire Up", class: "Mage", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=4wRyh7KLBRw" },
+        { name: "Fired Up", class: "Mage", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=4wRyh7KLBRw" },
         { name: "Winter's Blaze", class: "Mage", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=-820gRVwyO0" },
         { name: "Elemental Torrent", class: "Mage", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=8IqYN1Cebis" },
         { name: "Brand of the Pyromaniac", class: "Mage", zone: "Dustwallow Marsh", faction: "Both", video: "https://www.youtube.com/watch?v=_g9RKYzQIAM" },
@@ -610,6 +626,8 @@
         { name: "Kindling", class: "Mage", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=ydOkENcvw0Q" },
         { name: "Alter Time", class: "Mage", zone: "Alterac Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=RaeYxd-mXHc" },
         { name: "Shimmer", class: "Mage", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=hJEwsQ8Wq3o" },
+	{ name: "Frozen Flesh", class: "Mage", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=cM-McXZzhWw" },
+
 
 // SHAMAN
 	{ name: "Tethered Power", class: "Shaman", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=M_eqCs-akuA" },
@@ -670,6 +688,7 @@
         { name: "Cataclysmic Sundering", class: "Shaman", zone: "Burning Steppes", faction: "Both", video: "https://www.youtube.com/watch?v=Vw5xxeALj2s" },
         { name: "Astral Plane", class: "Shaman", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=s_6AISZILuo" },
         { name: "Spreading Tides", class: "Shaman", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=bQ26jaaC-1Q" },
+	{ name: "Cloudburst Totem", class: "Shaman", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=_lRl8gUi750" },
 		
 // DRUID
 	{ name: "Razor-Sharp Claws", class: "Druid", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=oVcg8kWiDUc" },
@@ -735,7 +754,9 @@
         { name: "Predator's Wrath: Focus", class: "Druid", zone: "Darkshore", faction: "Both", video: "https://www.youtube.com/watch?v=wf91sdeu9ts" },
         { name: "Stampeding Roar", class: "Druid", zone: "The Hinterlands", faction: "Both", video: "https://www.youtube.com/watch?v=GcP9dCbWU_I" },
         { name: "Solar Beam", class: "Druid", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=-Wj5FETceFk" },
-];
+	{ name: "Frenzied Growth", class: "Druid", zone: "Un`Goro Crater", faction: "Both", video: "https://www.youtube.com/watch?v=AjzsvTwFqaM" },
+    ];
+
     let collectedNames = JSON.parse(localStorage.getItem('ascension_save_v1')) || [];
     let currentClass = "all";
     let currentRegion = "all";
@@ -744,12 +765,8 @@
     let sortOrder = 1;
     let hasUnsavedChanges = false;
 
-    // --- DETECTION FERMETURE ---
     window.addEventListener('beforeunload', (e) => {
-        if (hasUnsavedChanges) {
-            e.preventDefault();
-            e.returnValue = ''; 
-        }
+        if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }
     });
 
     function renderTable() {
@@ -757,24 +774,29 @@
         const searchInput = document.getElementById('searchInput');
         const search = searchInput ? searchInput.value.toLowerCase() : "";
         const factionPool = enchants.filter(e => currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction);
+        
         updateProgress(factionPool);
         updateSortIcons();
+        
         let filtered = factionPool.filter(e => {
             const matchesSearch = e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search);
             const matchesClass = currentClass === "all" || e.class === currentClass;
             const matchesZone = currentRegion === "all" || e.zone === currentRegion;
             return matchesSearch && matchesClass && matchesZone;
         });
+
         filtered.sort((a, b) => {
             const isA = collectedNames.includes(a.name.toLowerCase());
             const isB = collectedNames.includes(b.name.toLowerCase());
             if (isA !== isB) return isA ? 1 : -1;
+            
             let valA = String(a[sortKey]).toLowerCase();
             let valB = String(b[sortKey]).toLowerCase();
             if (valA < valB) return -1 * sortOrder;
             if (valA > valB) return 1 * sortOrder;
             return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
         });
+
         body.innerHTML = "";
         filtered.forEach(e => {
             const isColl = collectedNames.includes(e.name.toLowerCase());
@@ -807,7 +829,10 @@
     function bulkAction(check) {
         const search = document.getElementById('searchInput').value.toLowerCase();
         enchants.forEach(e => {
-            if ((currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction) && (currentClass === "all" || e.class === currentClass) && (currentRegion === "all" || e.zone === currentRegion) && (e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search))) {
+            if ((currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction) && 
+                (currentClass === "all" || e.class === currentClass) && 
+                (currentRegion === "all" || e.zone === currentRegion) && 
+                (e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search))) {
                 const name = e.name.toLowerCase();
                 if (check && !collectedNames.includes(name)) collectedNames.push(name);
                 else if (!check) collectedNames = collectedNames.filter(n => n !== name);
@@ -821,7 +846,6 @@
         localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
         const dataStr = JSON.stringify(collectedNames, null, 2);
         const fileName = `wow_tracker_save_${new Date().toISOString().split('T')[0]}.json`;
-        
         if (window.showSaveFilePicker) {
             try {
                 const handle = await window.showSaveFilePicker({
@@ -878,11 +902,13 @@
         document.getElementById('clearSearch').style.display = val.length > 0 ? 'flex' : 'none';
         renderTable();
     }
+
     function clearSearch() {
         document.getElementById('searchInput').value = '';
         document.getElementById('clearSearch').style.display = 'none';
         renderTable();
     }
+
     function toggleDropdown(e, id) {
         e.stopPropagation();
         const list = document.getElementById(id);
@@ -890,6 +916,7 @@
         document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
         if (!isOpen) list.classList.add('show');
     }
+
     function selectClass(c) {
         currentClass = c;
         const dispText = document.getElementById('classDisplayText');
@@ -898,11 +925,13 @@
         else { dispText.innerText = c; dispIcon.src = `https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg`; dispIcon.style.display = 'inline-block'; }
         renderTable();
     }
+
     function selectRegion(r) {
         currentRegion = r;
         document.getElementById('regionDisplayText').innerText = r === 'all' ? 'All Regions' : r;
         renderTable();
     }
+
     function updateRegionDropdown(pool) {
         const container = document.getElementById('regionOptions');
         const zones = [...new Set(pool.map(e => e.zone))].sort();
@@ -910,23 +939,27 @@
         zones.forEach(z => { html += `<div class="option-item" onclick="selectRegion('${z}')">${z}</div>`; });
         container.innerHTML = html;
     }
+
     function setSort(key) {
         if (sortKey === key) sortOrder *= -1;
         else { sortKey = key; sortOrder = 1; }
         renderTable();
     }
+
     function updateSortIcons() {
-        ['name', 'class', 'zone'].forEach(key => {
+        ['name', 'class', 'zone', 'faction'].forEach(key => {
             const el = document.getElementById(`sort-${key}`);
             if (el) el.innerText = sortKey === key ? (sortOrder === 1 ? " ▲" : " ▼") : "";
         });
     }
+
     function setFaction(f) {
         currentFaction = f;
         document.querySelectorAll('.fac-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(f === 'Both' ? 'fac-both' : `fac-${f.toLowerCase()}`).classList.add('active');
         renderTable();
     }
+
     function updateProgress(pool) {
         const calc = (p) => {
             const uniq = [...new Set(p.map(e => e.name.toLowerCase()))];
@@ -936,11 +969,15 @@
         const [cD, cT] = calc(pool.filter(e => currentClass === 'all' || e.class === currentClass)); updateBar('class', cD, cT);
         const [zD, zT] = calc(pool.filter(e => currentRegion === 'all' || e.zone === currentRegion)); updateBar('region', zD, zT);
     }
+
     function updateBar(id, val, max) {
         const perc = max === 0 ? 0 : (val / max) * 100;
-        document.getElementById(`${id}Fill`).style.width = `${perc}%`;
-        document.getElementById(`${id}Text`).innerText = `${val}/${max}`;
+        const fill = document.getElementById(`${id}Fill`);
+        const text = document.getElementById(`${id}Text`);
+        if(fill) fill.style.width = `${perc}%`;
+        if(text) text.innerText = `${val}/${max}`;
     }
+
     function initClassOptions() {
         const container = document.getElementById('classOptions');
         let html = `<div class="option-item" onclick="selectClass('all')">All Classes</div>`;
@@ -949,6 +986,7 @@
         });
         container.innerHTML = html;
     }
+
     document.addEventListener('click', () => {
         document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
     });
