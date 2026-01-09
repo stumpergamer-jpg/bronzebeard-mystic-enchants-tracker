@@ -15,69 +15,60 @@
             --font-main: 'Inter', sans-serif;
         }
 
-        * { box-sizing: border-box; }
-        body { font-family: var(--font-main); background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 10px; line-height: 1.4; }
-        
-        .container { max-width: 1250px; margin: auto; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .header-section { text-align: center; margin-bottom: 15px; flex: 0 0 auto; }
-        
-        h1 { 
-            font-family: var(--font-main); 
-            color: var(--accent); 
-            margin: 0; 
-            font-size: 2.2rem; 
-            letter-spacing: 1px; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
-            font-weight: 700; 
-            text-transform: uppercase;
+        /* Animation pour le bouton Save */
+        @keyframes pulse-save {
+            0% { box-shadow: 0 0 0 0 rgba(248, 183, 0, 0.4); border-color: var(--accent); }
+            70% { box-shadow: 0 0 0 10px rgba(248, 183, 0, 0); border-color: var(--accent); }
+            100% { box-shadow: 0 0 0 0 rgba(248, 183, 0, 0); border-color: var(--accent); }
+        }
+        .btn-save-unsaved { 
+            animation: pulse-save 2s infinite; 
+            color: var(--accent) !important; 
+            font-weight: bold !important;
+            background: rgba(248, 183, 0, 0.05) !important;
         }
 
-        .credits-header {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-top: 5px;
-        }
+        * { box-sizing: border-box; font-family: var(--font-main); }
+        body { background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 10px; line-height: 1.4; }
+        .container { max-width: 1250px; margin: auto; min-height: 100vh; display: flex; flex-direction: column; }
+        .header-section { text-align: center; margin-bottom: 15px; flex: 0 0 auto; }
+        h1 { color: var(--accent); margin: 0; font-size: 2.2rem; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-weight: 700; text-transform: uppercase; }
+        .credits-header { font-size: 0.85rem; color: var(--text-dim); margin-top: 5px; }
 
         .top-bar { flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
         .data-management { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .data-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        
         label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .btn-data { font-family: var(--font-main); font-weight: 600; background: #2a2a2a; border: 1px solid #444; color: #ddd; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+        .btn-data { font-weight: 600; background: #2a2a2a; border: 1px solid #444; color: #ddd; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
         .btn-data:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-report { border-color: #444; color: #888; margin-left: 5px; }
+        .btn-report:hover { border-color: var(--danger); color: white; background: rgba(196, 30, 58, 0.1); }
 
         .search-wrapper { position: relative; width: 100%; }
-        .search-wrapper::before {
-            content: "🔍"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-            font-size: 0.9rem; color: var(--text-dim); pointer-events: none;
-        }
-        #searchInput { width: 100%; padding: 10px 40px 10px 40px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: white; font-family: var(--font-main); font-size: 0.9rem; }
-        #clearSearch { 
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-            background: #333; color: #aaa; border: none; border-radius: 50%; 
-            width: 20px; height: 20px; cursor: pointer; font-size: 12px; 
-            display: none; align-items: center; justify-content: center; line-height: 1;
-        }
-        #clearSearch:hover { background: var(--danger); color: white; }
+        .search-wrapper::before { content: "🔍"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; color: var(--text-dim); pointer-events: none; }
+        #searchInput { width: 100%; padding: 10px 40px 10px 40px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: white; font-size: 0.9rem; }
+        #clearSearch { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: #333; color: #aaa; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; display: none; align-items: center; justify-content: center; }
 
         .dropdown-group { flex: 1; position: relative; min-width: 150px; }
-        .custom-select { 
-            font-family: var(--font-main); background-color: var(--input-bg); border: 1px solid var(--border); 
-            color: white; font-size: 0.85rem; border-radius: 6px; height: 36px; padding: 0 10px; 
-            width: 100%; display: flex; align-items: center; cursor: pointer; 
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); 
-            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
-        }
-        .options-list { 
-            position: absolute; top: 100%; left: 0; right: 0; background: #222; 
-            border: 1px solid var(--border); z-index: 100; display: none; 
-            border-radius: 6px; max-height: 250px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
+        .custom-select { background-color: var(--input-bg); border: 1px solid var(--border); color: white; font-size: 0.85rem; border-radius: 6px; height: 36px; padding: 0 10px; width: 100%; display: flex; align-items: center; cursor: pointer; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto; }
+        .options-list { position: absolute; top: 100%; left: 0; right: 0; background: #222; border: 1px solid var(--border); z-index: 100; display: none; border-radius: 6px; max-height: 250px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .options-list.show { display: block; }
-        .option-item { padding: 8px 12px; display: flex; align-items: center; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #333; transition: 0.1s; }
+        .option-item { padding: 8px 12px; display: flex; align-items: center; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #333; }
         .option-item:hover { background: #333; color: var(--accent); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--border); width: 100%; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1.5rem; }
+        .report-form { display: flex; flex-direction: column; gap: 12px; }
+        .report-form select, .report-form textarea { background: var(--input-bg); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; font-size: 0.85rem; width: 100%; outline: none; }
+        
+        /* CADRE DÉTAILS NON MODIFIABLE EN TAILLE */
+        .report-form textarea { resize: none !important; } 
+
+        .report-form label { font-size: 0.65rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .progress-section { flex: 0 0 auto; background: var(--card-bg); padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .progress-container { display: flex; flex-direction: column; gap: 6px; }
@@ -89,51 +80,38 @@
 
         .table-wrapper { flex: 1 1 auto; overflow-x: auto; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); display: flex; flex-direction: column; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; } 
-        
         thead { background: #252525; }
-        th { padding: 12px; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; border-bottom: 2px solid var(--border); text-align: left; cursor: pointer; user-select: none; }
-        th:hover { background: #333; }
-        .col-collect { width: 80px; text-align: center; font-size: 0.65rem; }
-        
-        td { padding: 8px 12px; border-bottom: 1px solid #252525; font-size: 0.85rem; }
+        th { padding: 12px; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; border-bottom: 2px solid var(--border); text-align: center; cursor: pointer; user-select: none; }
+        th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3), th:nth-child(5), td:nth-child(5) { text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #252525; font-size: 0.85rem; text-align: center; vertical-align: middle; }
         tr:hover td { background: #222; }
         tr.collected { opacity: 0.45; }
         
-        .btn-action { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.2s; margin: auto; }
+        .btn-action, .fac-btn, .btn-video { transition: all 0.2s ease; }
+        .btn-action { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: auto; }
         .btn-collect { background: rgba(76, 175, 80, 0.1); color: var(--success); border: 1px solid var(--success); }
-        .btn-collect:hover { background: var(--success); color: white; }
+        .btn-collect:hover { background: rgba(76, 175, 80, 0.3); box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); transform: translateY(-1px); }
         .btn-remove { background: rgba(196, 30, 58, 0.1); color: var(--danger); border: 1px solid var(--danger); }
-        .btn-remove:hover { background: var(--danger); color: white; }
+        .btn-remove:hover { background: rgba(196, 30, 58, 0.3); box-shadow: 0 0 8px rgba(196, 30, 58, 0.4); transform: translateY(-1px); }
 
         .icon-class { width: 18px; height: 18px; border-radius: 3px; vertical-align: middle; margin-right: 8px; }
-        .btn-video { font-size: 0.6rem; padding: 3px 8px; background: var(--danger); color: white; text-decoration: none; border-radius: 4px; font-weight: 800; transition: 0.2s ease; display: inline-block; }
-        .btn-video:hover { background: #ff4d4d; box-shadow: 0 0 8px rgba(196, 30, 58, 0.4); transform: translateY(-1px); }
+        .fac-icon { width: 16px; height: 16px; object-fit: contain; vertical-align: middle; margin: 0 2px; }
+        .btn-video { font-size: 0.6rem; padding: 4px 8px; background: var(--danger); color: white; text-decoration: none; border-radius: 4px; font-weight: 800; display: inline-block; }
+        .btn-video:hover { background: #e61919; box-shadow: 0 0 10px rgba(196, 30, 58, 0.4); transform: scale(1.05); }
 
         footer { flex: 0 0 auto; margin-top: 10px; padding: 10px; text-align: center; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.8rem; }
         .credits-link { color: var(--accent); text-decoration: none; font-weight: 600; }
-        
         .faction-selector { display: flex; background: #111; padding: 3px; border-radius: 6px; border: 1px solid #333; gap: 4px; }
-        .fac-btn { padding: 4px 10px; border: 1px solid transparent; background: transparent; color: #666; cursor: pointer; font-weight: bold; border-radius: 4px; transition: 0.2s; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
+        .fac-btn { padding: 4px 10px; border: 1px solid transparent; background: transparent; color: #666; cursor: pointer; font-weight: bold; border-radius: 4px; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
+        .fac-btn:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--text-dim); }
         .fac-btn.active.all { background: #333; color: var(--accent); border: 1px solid var(--accent); }
         .fac-btn.active.alliance { background: var(--alliance); color: white; }
         .fac-btn.active.horde { background: var(--horde); color: white; }
-        .fac-icon { width: 16px; height: 16px; object-fit: contain; }
 
         @media (max-width: 768px) {
             h1 { font-size: 1.5rem; }
-            .progress-section { grid-template-columns: 1fr; gap: 10px; }
-            .data-management { justify-content: center; }
-            .data-group { justify-content: center; width: 100%; }
-            .dropdown-group { width: 100%; }
-            .top-bar { padding: 8px; }
-            .credits-header { font-size: 0.75rem; }
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translate(-50%, -20px); }
-            15% { opacity: 1; transform: translate(-50%, 0); }
-            85% { opacity: 1; transform: translate(-50%, 0); }
-            100% { opacity: 0; transform: translate(-50%, -20px); }
+            .progress-section { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -143,7 +121,7 @@
     <div class="header-section">
         <h1>Mystic Enchants Tracker</h1>
         <div class="credits-header">
-            Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> and <a href="https://www.youtube.com/@WhiterBronzebeard" target="_blank" class="credits-link">WhiterBronzebeard</a> for the locations data and tutorial.
+            Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credits-link">shadowmeldgg</a> and <a href="https://www.youtube.com/@WhiterBronzebeard" target="_blank" class="credits-link">WhiterBronzebeard</a>.
         </div>
     </div>
 
@@ -154,18 +132,19 @@
                 <div class="faction-selector">
                     <button class="fac-btn all active" id="fac-both" onclick="setFaction('Both')">ALL</button>
                     <button class="fac-btn alliance" id="fac-alliance" onclick="setFaction('Alliance')">
-                        <img src="https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg" class="fac-icon">
+                        <img src="https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg" style="width:16px; height:16px;">
                     </button>
                     <button class="fac-btn horde" id="fac-horde" onclick="setFaction('Horde')">
-                        <img src="https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg" class="fac-icon">
+                        <img src="https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg" style="width:16px; height:16px;">
                     </button>
                 </div>
             </div>
             <div class="data-group">
                 <button class="btn-data" style="color:var(--success)" onclick="bulkAction(true)">✓ Collect All</button>
                 <button class="btn-data" style="color:var(--danger)" onclick="bulkAction(false)">✗ Collect None</button>
-                <button class="btn-data" onclick="exportData()">💾 Save</button>
+                <button class="btn-data" id="saveBtn" onclick="exportData()">💾 Save</button>
                 <button class="btn-data" onclick="document.getElementById('importFile').click()">📂 Load</button>
+                <button class="btn-data btn-report" onclick="openReportModal()">⚠️ Report Bug</button>
                 <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
             </div>
         </div>
@@ -196,24 +175,15 @@
 
     <div class="progress-section">
         <div class="progress-container">
-            <div class="progress-header">
-                <span class="progress-label">Global Progress</span>
-                <span id="globalText" class="progress-text">0/0</span>
-            </div>
+            <div class="progress-header"><span class="progress-label">Global Progress</span><span id="globalText" class="progress-text">0/0</span></div>
             <div class="progress-bar-bg"><div id="globalFill" class="progress-bar-fill"></div></div>
         </div>
         <div class="progress-container">
-            <div class="progress-header">
-                <span id="classProgressLabel" class="progress-label">Class Progress</span>
-                <span id="classText" class="progress-text">0/0</span>
-            </div>
+            <div class="progress-header"><span class="progress-label">Class Progress</span><span id="classText" class="progress-text">0/0</span></div>
             <div class="progress-bar-bg"><div id="classFill" class="progress-bar-fill" style="background: var(--success);"></div></div>
         </div>
         <div class="progress-container">
-            <div class="progress-header">
-                <span id="regionProgressLabel" class="progress-label">Region Progress</span>
-                <span id="regionText" class="progress-text">0/0</span>
-            </div>
+            <div class="progress-header"><span class="progress-label">Region Progress</span><span id="regionText" class="progress-text">0/0</span></div>
             <div class="progress-bar-bg"><div id="regionFill" class="progress-bar-fill" style="background: #0078ff;"></div></div>
         </div>
     </div>
@@ -222,21 +192,52 @@
         <table>
             <thead>
                 <tr>
-                    <th class="col-collect">Collect</th>
-                    <th onclick="setSort('name')">Enchant <span id="sort-name" class="sort-icon"></span></th>
-                    <th onclick="setSort('class')">Class <span id="sort-class" class="sort-icon"></span></th>
-                    <th style="width:100px;" onclick="setSort('faction')">Faction <span id="sort-faction" class="sort-icon"></span></th>
-                    <th onclick="setSort('zone')">Location <span id="sort-zone" class="sort-icon"></span></th>
-                    <th style="width: 100px; text-align:center;">Video</th>
+                    <th style="width: 80px;">Collect</th>
+                    <th onclick="setSort('name')">Enchant <span id="sort-name"></span></th>
+                    <th onclick="setSort('class')" style="width: 150px;">Class <span id="sort-class"></span></th>
+                    <th style="width: 100px;" onclick="setSort('faction')">Faction <span id="sort-faction"></span></th>
+                    <th onclick="setSort('zone')">Location <span id="sort-zone"></span></th>
+                    <th style="width: 100px;">Video</th>
                 </tr>
             </thead>
             <tbody id="reBody"></tbody>
         </table>
     </div>
 
-    <footer>
-        <p>Version 1.1</p>
-    </footer>
+    <footer><p>Version 1.2 | Bronzebeard ME Tracker</p></footer>
+</div>
+
+<div id="reportModal" class="modal-overlay" onclick="if(event.target == this) toggleReportModal(false)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="margin:0; color:var(--accent); font-size:1.1rem;">Bug Report / Suggestion</h2>
+            <button class="modal-close" onclick="toggleReportModal(false)">✕</button>
+        </div>
+        <form class="report-form" id="bugReportForm">
+            <label>1. Issue Category</label>
+            <select id="reportType" required>
+                <option value="Location Moved">Enchant no longer at this location</option>
+                <option value="Missing Enchant">Enchant missing from the app</option>
+                <option value="Faction Error">Incorrect faction access</option>
+                <option value="Wrong Class">Incorrect class assignment</option>
+                <option value="Broken Link">Broken link</option>
+                <option value="Suggestion">Other / UI Bug</option>
+            </select>
+            <div class="form-row">
+                <div><label>2. Faction</label>
+                    <select id="reportFaction"><option value="Not specified">Not specified</option><option value="Alliance">Alliance</option><option value="Horde">Horde</option><option value="Both">Both</option></select>
+                </div>
+                <div><label>3. Class</label><select id="reportClass" onchange="updateReportEnchantList()"></select></div>
+            </div>
+            <div class="form-row">
+                <div><label>4. Region</label><select id="reportRegion" onchange="updateReportEnchantList()"></select></div>
+                <div><label>5. Enchant Name</label><select id="reportEnchant"></select></div>
+            </div>
+            <label>6. Description</label>
+            <textarea id="reportDesc" rows="4" placeholder="Describe the issue..." required></textarea>
+            <button type="submit" class="btn-data" style="background:var(--accent); color:black; justify-content:center; padding:12px; margin-top:5px; font-weight:700;">OPEN GITHUB ISSUE</button>
+        </form>
+    </div>
 </div>
 
 <script>
@@ -245,11 +246,7 @@
         "Warrior": "classicon_warrior", "Paladin": "classicon_paladin", "Rogue": "classicon_rogue", 
         "Druid": "classicon_druid", "Shaman": "classicon_shaman", "Warlock": "classicon_warlock" 
     };
-
-    const icons = {
-        alliance: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg",
-        horde: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg"
-    };
+    const icons = { alliance: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg", horde: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg" };
 
     let enchants = [
 // PRIEST
@@ -822,29 +819,21 @@
 	{ name: "Predator's Wrath: Combo", class: "Druid", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=vjIgu863M28&list=PLdApKfDWsi1-YnlzstjkV0HbgDw3hZrAq&index=35" },
 	{ name: "Nature's Abundance", class: "Druid", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=AjzsvTwFqaM" },
 	{ name: "Ambush Predator", class: "Druid", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=o0JLK6R_CEc&list=PLdApKfDWsi1-YnlzstjkV0HbgDw3hZrAq&index=43" },
-    ];
+	];
 
     let collectedNames = JSON.parse(localStorage.getItem('ascension_save_v1')) || [];
-    let currentClass = "all";
-    let currentRegion = "all";
-    let currentFaction = "Both";
-    let sortKey = 'zone'; 
-    let sortOrder = 1;
-    let hasUnsavedChanges = false;
-
-    window.addEventListener('beforeunload', (e) => {
-        if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }
-    });
+    let currentClass = "all", currentRegion = "all", currentFaction = "Both", sortKey = 'zone', sortOrder = 1;
+    let hasUnsavedChanges = false; 
 
     function renderTable() {
         const body = document.getElementById('reBody');
-        const searchInput = document.getElementById('searchInput');
-        const search = searchInput ? searchInput.value.toLowerCase() : "";
+        const search = document.getElementById('searchInput').value.toLowerCase();
         const factionPool = enchants.filter(e => currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction);
         
         updateProgress(factionPool);
         updateSortIcons();
-        
+        updateSaveStatus();
+
         let filtered = factionPool.filter(e => {
             const matchesSearch = e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search);
             const matchesClass = currentClass === "all" || e.class === currentClass;
@@ -856,7 +845,6 @@
             const isA = collectedNames.includes(a.name.toLowerCase());
             const isB = collectedNames.includes(b.name.toLowerCase());
             if (isA !== isB) return isA ? 1 : -1;
-            
             let valA = String(a[sortKey]).toLowerCase();
             let valB = String(b[sortKey]).toLowerCase();
             if (valA < valB) return -1 * sortOrder;
@@ -869,99 +857,64 @@
             const isColl = collectedNames.includes(e.name.toLowerCase());
             const row = document.createElement('tr');
             if (isColl) row.className = 'collected';
+            const factHTML = e.faction === "Both" ? `<img src="${icons.alliance}" class="fac-icon"><img src="${icons.horde}" class="fac-icon">` : `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`;
+
             row.innerHTML = `
-                <td class="action-cell col-collect">
-                    <button class="btn-action ${isColl ? 'btn-remove' : 'btn-collect'}" onclick="toggleRE('${e.name.toLowerCase()}', ${!isColl})">
-                        ${isColl ? '✕' : '✓'}
-                    </button>
-                </td>
+                <td><button class="btn-action ${isColl ? 'btn-remove' : 'btn-collect'}" onclick="toggleRE('${e.name.toLowerCase()}', ${!isColl})">${isColl ? '✕' : '✓'}</button></td>
                 <td style="font-weight:600">${e.name}</td>
-                <td><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[e.class]}.jpg" class="icon-class">${e.class}</td>
-                <td style="width:100px;">${e.faction === "Both" ? `<img src="${icons.alliance}" class="fac-icon"><img src="${icons.horde}" class="fac-icon">` : `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`}</td>
+                <td><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[e.class]}.jpg" class="icon-class"><span>${e.class}</span></td>
+                <td>${factHTML}</td>
                 <td style="color:var(--text-dim)">${e.zone}</td>
-                <td style="width:100px; text-align:center">${e.video ? `<a href="${e.video}" target="_blank" class="btn-video">WATCH</a>` : '—'}</td>
+                <td>${e.video ? `<a href="${e.video}" target="_blank" class="btn-video">WATCH</a>` : '<span style="color:#333">—</span>'}</td>
             `;
             body.appendChild(row);
         });
         updateRegionDropdown(factionPool);
     }
 
-    function toggleRE(name, shouldAdd) {
-        if (shouldAdd) { if (!collectedNames.includes(name)) collectedNames.push(name); }
+    function toggleRE(name, add) {
+        if (add) { if (!collectedNames.includes(name)) collectedNames.push(name); }
         else { collectedNames = collectedNames.filter(n => n !== name); }
-        hasUnsavedChanges = true;
-        renderTable();
-    }
-
-    function bulkAction(check) {
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        enchants.forEach(e => {
-            if ((currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction) && 
-                (currentClass === "all" || e.class === currentClass) && 
-                (currentRegion === "all" || e.zone === currentRegion) && 
-                (e.name.toLowerCase().includes(search) || e.zone.toLowerCase().includes(search))) {
-                const name = e.name.toLowerCase();
-                if (check && !collectedNames.includes(name)) collectedNames.push(name);
-                else if (!check) collectedNames = collectedNames.filter(n => n !== name);
-            }
-        });
-        hasUnsavedChanges = true;
-        renderTable();
-    }
-
-    async function exportData() {
         localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
-        const dataStr = JSON.stringify(collectedNames, null, 2);
-        const fileName = `wow_tracker_save_${new Date().toISOString().split('T')[0]}.json`;
-        if (window.showSaveFilePicker) {
-            try {
-                const handle = await window.showSaveFilePicker({
-                    suggestedName: fileName,
-                    types: [{ description: 'JSON File', accept: {'application/json': ['.json']} }],
-                });
-                const writable = await handle.createWritable();
-                await writable.write(dataStr);
-                await writable.close();
-                hasUnsavedChanges = false;
-                showStatusMessage("Progression sauvegardée !");
-            } catch (err) { console.log("Sauvegarde annulée"); }
-        } else {
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = window.URL.createObjectURL(dataBlob);
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url; downloadLink.download = fileName;
-            document.body.appendChild(downloadLink); downloadLink.click();
-            document.body.removeChild(downloadLink); window.URL.revokeObjectURL(url);
-            hasUnsavedChanges = false;
-            showStatusMessage("Fichier téléchargé !");
-        }
+        hasUnsavedChanges = true; 
+        renderTable();
     }
 
-    function importData(event) {
-        const file = event.target.files[0];
+    function updateSaveStatus() {
+        const btn = document.getElementById('saveBtn');
+        hasUnsavedChanges ? btn.classList.add('btn-save-unsaved') : btn.classList.remove('btn-save-unsaved');
+    }
+
+    function exportData() {
+        const blob = new Blob([JSON.stringify(collectedNames)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = 'ME_Backup.json'; a.click();
+        hasUnsavedChanges = false;
+        updateSaveStatus();
+    }
+
+    window.addEventListener('beforeunload', (e) => {
+        if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }
+    });
+
+    function importData(e) {
+        const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (Array.isArray(data)) {
-                    collectedNames = data;
-                    localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
-                    hasUnsavedChanges = false;
-                    renderTable();
-                    showStatusMessage("Fichier chargé !");
-                }
-            } catch (err) { alert("Erreur d'importation."); }
+        reader.onload = (ev) => {
+            collectedNames = JSON.parse(ev.target.result);
+            localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
+            hasUnsavedChanges = false;
+            renderTable();
         };
         reader.readAsText(file);
     }
 
-    function showStatusMessage(text) {
-        const msg = document.createElement('div');
-        msg.textContent = text;
-        msg.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 10px 20px; border-radius: 5px; z-index: 10000; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: fadeInOut 3s forwards;`;
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 3000);
+    function setFaction(f) {
+        currentFaction = f;
+        document.querySelectorAll('.fac-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(f === 'Both' ? 'fac-both' : `fac-${f.toLowerCase()}`).classList.add('active');
+        renderTable();
     }
 
     function handleSearchInput() {
@@ -970,34 +923,10 @@
         renderTable();
     }
 
-    function clearSearch() {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('clearSearch').style.display = 'none';
-        renderTable();
-    }
-
-    function toggleDropdown(e, id) {
-        e.stopPropagation();
-        const list = document.getElementById(id);
-        const isOpen = list.classList.contains('show');
-        document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
-        if (!isOpen) list.classList.add('show');
-    }
-
-    function selectClass(c) {
-        currentClass = c;
-        const dispText = document.getElementById('classDisplayText');
-        const dispIcon = document.getElementById('classDisplayIcon');
-        if (c === 'all') { dispText.innerText = 'All Classes'; dispIcon.style.display = 'none'; }
-        else { dispText.innerText = c; dispIcon.src = `https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg`; dispIcon.style.display = 'inline-block'; }
-        renderTable();
-    }
-
-    function selectRegion(r) {
-        currentRegion = r;
-        document.getElementById('regionDisplayText').innerText = r === 'all' ? 'All Regions' : r;
-        renderTable();
-    }
+    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); }
+    function toggleDropdown(e, id) { e.stopPropagation(); document.querySelectorAll('.options-list').forEach(l => { if(l.id === id) l.classList.toggle('show'); else l.classList.remove('show'); }); }
+    function selectClass(c) { currentClass = c; document.getElementById('classDisplayText').innerText = c === 'all' ? 'All Classes' : c; renderTable(); }
+    function selectRegion(r) { currentRegion = r; document.getElementById('regionDisplayText').innerText = r === 'all' ? 'All Regions' : r; renderTable(); }
 
     function updateRegionDropdown(pool) {
         const container = document.getElementById('regionOptions');
@@ -1005,26 +934,6 @@
         let html = `<div class="option-item" onclick="selectRegion('all')">All Regions</div>`;
         zones.forEach(z => { html += `<div class="option-item" onclick="selectRegion('${z}')">${z}</div>`; });
         container.innerHTML = html;
-    }
-
-    function setSort(key) {
-        if (sortKey === key) sortOrder *= -1;
-        else { sortKey = key; sortOrder = 1; }
-        renderTable();
-    }
-
-    function updateSortIcons() {
-        ['name', 'class', 'zone', 'faction'].forEach(key => {
-            const el = document.getElementById(`sort-${key}`);
-            if (el) el.innerText = sortKey === key ? (sortOrder === 1 ? " ▲" : " ▼") : "";
-        });
-    }
-
-    function setFaction(f) {
-        currentFaction = f;
-        document.querySelectorAll('.fac-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(f === 'Both' ? 'fac-both' : `fac-${f.toLowerCase()}`).classList.add('active');
-        renderTable();
     }
 
     function updateProgress(pool) {
@@ -1039,31 +948,66 @@
 
     function updateBar(id, val, max) {
         const perc = max === 0 ? 0 : (val / max) * 100;
-        const fill = document.getElementById(`${id}Fill`);
-        const text = document.getElementById(`${id}Text`);
-        if(fill) fill.style.width = `${perc}%`;
-        if(text) text.innerText = `${val}/${max}`;
+        document.getElementById(`${id}Fill`).style.width = `${perc}%`;
+        document.getElementById(`${id}Text`).innerText = `${val}/${max}`;
     }
 
     function initClassOptions() {
         const container = document.getElementById('classOptions');
         let html = `<div class="option-item" onclick="selectClass('all')">All Classes</div>`;
-        Object.keys(classData).sort().forEach(c => {
-            html += `<div class="option-item" onclick="selectClass('${c}')"><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg" class="icon-class"> ${c}</div>`;
-        });
+        Object.keys(classData).sort().forEach(c => { html += `<div class="option-item" onclick="selectClass('${c}')"><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[c]}.jpg" class="icon-class"> ${c}</div>`; });
         container.innerHTML = html;
     }
 
-    document.addEventListener('click', () => {
-        document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show'));
+    function setSort(key) { if (sortKey === key) sortOrder *= -1; else { sortKey = key; sortOrder = 1; } renderTable(); }
+    function updateSortIcons() { ['name', 'class', 'zone', 'faction'].forEach(key => { const el = document.getElementById(`sort-${key}`); if (el) el.innerText = sortKey === key ? (sortOrder === 1 ? " ▲" : " ▼") : ""; }); }
+
+    function bulkAction(add) {
+        if (!confirm(add ? "Mark ALL visible as collected?" : "Unmark ALL visible?")) return;
+        const visible = enchants.filter(e => (currentFaction === "Both" || e.faction === "Both" || e.faction === currentFaction) && (currentClass === 'all' || e.class === currentClass) && (currentRegion === 'all' || e.zone === currentRegion));
+        visible.forEach(e => { const n = e.name.toLowerCase(); if (add && !collectedNames.includes(n)) collectedNames.push(n); else if (!add) collectedNames = collectedNames.filter(x => x !== n); });
+        localStorage.setItem('ascension_save_v1', JSON.stringify(collectedNames));
+        hasUnsavedChanges = true;
+        renderTable();
+    }
+
+    function toggleReportModal(show) { document.getElementById('reportModal').style.display = show ? 'flex' : 'none'; }
+    function openReportModal() { populateReportSelectors(); toggleReportModal(true); }
+    function populateReportSelectors() {
+        document.getElementById('reportClass').innerHTML = `<option>Not specified</option>` + Object.keys(classData).sort().map(c => `<option>${c}</option>`).join('');
+        document.getElementById('reportRegion').innerHTML = `<option>Not specified</option>` + [...new Set(enchants.map(e => e.zone))].sort().map(r => `<option>${r}</option>`).join('');
+        updateReportEnchantList();
+    }
+    function updateReportEnchantList() {
+        const c = document.getElementById('reportClass').value, r = document.getElementById('reportRegion').value;
+        let f = enchants; if (c !== "Not specified") f = f.filter(e => e.class === c); if (r !== "Not specified") f = f.filter(e => e.zone === r);
+        document.getElementById('reportEnchant').innerHTML = `<option>Not specified</option>` + [...new Set(f.map(e => e.name))].sort().map(n => `<option>${n}</option>`).join('') + `<option>Other</option>`;
+    }
+
+    document.getElementById('bugReportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // RECUPERATION DES VALEURS DU FORMULAIRE
+        const type = document.getElementById('reportType').value;
+        const enchant = document.getElementById('reportEnchant').value;
+        const faction = document.getElementById('reportFaction').value;
+        const className = document.getElementById('reportClass').value;
+        const region = document.getElementById('reportRegion').value;
+        const desc = document.getElementById('reportDesc').value;
+
+        // CONSTRUCTION DU TITRE ET DU CORPS
+        const title = encodeURIComponent(`[Bug Report] ${type}: ${enchant}`);
+        const body = encodeURIComponent(`## Issue Details\n- **Type:** ${type}\n- **Enchant:** ${enchant}\n- **Faction:** ${faction}\n- **Class:** ${className}\n- **Region:** ${region}\n\n## Description\n${desc}`);
+        
+        // URL GITHUB MISE A JOUR
+        window.open(`https://github.com/stumpergamer-jpg/bronzebeard-mystic-enchants-tracker/issues/new?title=${title}&body=${body}`, '_blank');
+        
+        toggleReportModal(false);
     });
 
+    document.addEventListener('click', () => { document.querySelectorAll('.options-list').forEach(l => l.classList.remove('show')); });
     initClassOptions();
     renderTable();
 </script>
-
 </body>
 </html>
-
-
-
