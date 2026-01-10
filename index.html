@@ -1438,7 +1438,7 @@
                 const cleanName = e.name.replace(/:/g, "");
                 // Escape name for JS string
                 const safeName = e.name.replace(/'/g, "\\'");
-                const iconHTML = `<img src="icons/${cleanName}.png" class="spell-icon" onerror="handleIconError(this, '${safeName}')">`;
+                const iconHTML = `<img src="Icons/${cleanName}.png" class="spell-icon" onerror="handleIconError(this, '${safeName}')">`;
 
                 row.innerHTML = `
                 <td><button class="btn-action ${isColl ? 'btn-remove' : 'btn-collect'}" onclick="toggleRE('${e.name.toLowerCase()}', ${!isColl})">${isColl ? '✕' : '✓'}</button></td>
@@ -1474,7 +1474,7 @@
             // 1. Try Stripped PNG (default initial src)
             // 2. Try Stripped JPG
             if (currentSrc.endsWith(`${cleanName}.png`)) {
-                img.src = `icons/${cleanName}.jpg`;
+                img.src = `Icons/${cleanName}.jpg`;
                 return;
             }
             // 3. Try Hyphenated PNG
@@ -1483,12 +1483,12 @@
                     img.style.display = 'none';
                     return;
                 }
-                img.src = `icons/${hyphenName}.png`;
+                img.src = `Icons/${hyphenName}.png`;
                 return;
             }
             // 4. Try Hyphenated JPG
             if (currentSrc.endsWith(`${hyphenName}.png`)) {
-                img.src = `icons/${hyphenName}.jpg`;
+                img.src = `Icons/${hyphenName}.jpg`;
                 return;
             }
             // 5. Give up
@@ -1641,3 +1641,4 @@
 
 
 </html>
+
