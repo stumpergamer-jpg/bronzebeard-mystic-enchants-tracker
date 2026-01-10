@@ -1566,7 +1566,7 @@
                 const row = document.createElement('tr');
                 if (isColl) row.className = 'collected';
                 if (isColl) row.className = 'collected';
-                const factHTML = e.faction === "Both" ? `<img src="${Icons.alliance}" class="fac-icon"><img src="${Icons.horde}" class="fac-icon">` : `<img src="${Icons[e.faction.toLowerCase()]}" class="fac-icon">`;
+                const factHTML = e.faction === "Both" ? `<img src="${icons.alliance}" class="fac-icon"><img src="${icons.horde}" class="fac-icon">` : `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`;
 
                 // LOGIQUE ICONE INTÉGRÉE
                 const cleanName = e.name.replace(/:/g, "");
@@ -1807,4 +1807,5 @@
 </body>
 
 </html>
+
 
