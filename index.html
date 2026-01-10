@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WoW Ascension - Bronzebeard ME Tracker v1.3</title>
+    <title>WoW Ascension - Bronzebeard ME Tracker v1.4</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
@@ -86,9 +86,78 @@
         }
 
         .credits-header {
+            display: none;
+            /* Hiding old one if needed, or just replacing it entirely in HTML */
+        }
+
+        .community-box {
+            background: linear-gradient(145deg, #1a1a1a, #222);
+            border: 1px solid #333;
+            border-left: 4px solid var(--accent);
+            border-right: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px auto 20px auto;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .community-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .community-text {
+            font-size: 0.95rem;
+            color: #ddd;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .credit-chip {
+            background: #cc0000;
+            /* YouTube Red-ish */
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
             font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .credit-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(204, 0, 0, 0.4);
+            background: #ff0000;
+        }
+
+        .cta-text {
+            font-size: 0.85rem;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .highlight-cta {
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-style: normal;
         }
 
         .top-bar {
@@ -519,6 +588,36 @@
             transform: scale(1.05);
         }
 
+        .btn-map {
+            font-size: 0.6rem;
+            padding: 4px 14px;
+            background: var(--success);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .btn-map:hover {
+            background: #45a049;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+            transform: scale(1.05);
+        }
+
+        .btn-unknown {
+            font-size: 0.6rem;
+            padding: 4px 8px;
+            background: #444;
+            color: #aaa;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: not-allowed;
+            display: inline-block;
+            text-decoration: none;
+        }
+
         .spell-icon {
             width: 24px;
             height: 24px;
@@ -611,10 +710,21 @@
     <div class="container">
         <div class="header-section">
             <h1>Mystic Enchants Tracker</h1>
-            <div class="credits-header">
-                Special thanks to <a href="https://www.youtube.com/@shadowmeldgg" target="_blank"
-                    class="credits-link">shadowmeldgg</a> and <a href="https://www.youtube.com/@WhiterBronzebeard"
-                    target="_blank" class="credits-link">WhiterBronzebeard</a>.
+
+            <div class="community-box">
+                <div class="community-text">
+                    <span>❤️ Guides courtesy of</span>
+                    <a href="https://www.youtube.com/@shadowmeldgg" target="_blank" class="credit-chip">▶
+                        shadowmeldgg</a>
+                    <span>&</span>
+                    <a href="https://www.youtube.com/@WhiterBronzebeard" target="_blank" class="credit-chip">▶
+                        WhiterBronzebeard</a>
+                    <span>❤️</span>
+                </div>
+                <div class="cta-text">
+                    Found these guides helpful? Don't forget to <span class="highlight-cta">Like & Subscribe</span> to
+                    their channels to support their work!
+                </div>
             </div>
         </div>
 
@@ -705,7 +815,7 @@
                         <th style="width: 100px;" onclick="setSort('faction')">Faction <span id="sort-faction"></span>
                         </th>
                         <th onclick="setSort('zone')">Location <span id="sort-zone"></span></th>
-                        <th style="width: 100px;">Video</th>
+                        <th style="width: 100px;">Guide</th>
                     </tr>
                 </thead>
                 <tbody id="reBody"></tbody>
@@ -713,7 +823,7 @@
         </div>
 
         <footer>
-            <p>Version 1.3 | Bronzebeard ME Tracker</p>
+            <p>Version 1.4 | Bronzebeard ME Tracker</p>
         </footer>
     </div>
 
@@ -810,8 +920,8 @@
             { name: "Void Herald: Madness of the Old Gods", class: "Priest", zone: "Silithus", faction: "Both", video: "https://www.youtube.com/watch?v=2lpZB4p47ns" },
             { name: "Light and Shadow", class: "Priest", zone: "Silverpine Forest", faction: "Horde", video: "https://www.youtube.com/watch?v=oc46grMGZ28" },
             { name: "Psychic Infusion", class: "Priest", zone: "Silverpine Forest", faction: "Horde", video: "https://www.youtube.com/watch?v=PbYsS_9-IHc" },
-            { name: "Psychic Infusion", class: "Priest", zone: "Darkshore", faction: "Horde", video: "https://www.youtube.com/watch?v=PbYsS_9-IHc" },
-            { name: "Promise of Renewal", class: "Priest", zone: "Silverpine Forest", faction: "Alliance", video: "https://www.youtube.com/watch?v=rleG5FUm8is&list=PLdApKfDWsi1_LHfYoxGkiZfUOjJUprYQS&index=13" },
+            { name: "Psychic Infusion", class: "Priest", zone: "Darkshore", faction: "Alliance", video: "https://www.youtube.com/shorts/Np5IJqZehWk" },
+            { name: "Promise of Renewal", class: "Priest", zone: "Silverpine Forest", faction: "Horde", video: "https://www.youtube.com/watch?v=rleG5FUm8is&list=PLdApKfDWsi1_LHfYoxGkiZfUOjJUprYQS&index=13" },
             { name: "Energizing Prayer", class: "Priest", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=OhNIGodJK4E" },
             { name: "Light at the End of the Tunnel", class: "Priest", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=1iSlFDxVikU" },
             { name: "Higher Power", class: "Priest", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=5tET9fxhfvg" },
@@ -835,6 +945,9 @@
             { name: "Wanding", class: "Priest", zone: "Wetlands", faction: "Both", video: "https://www.youtube.com/watch?v=k2BDXoCl74A" },
             { name: "Impending Doom", class: "Priest", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=Jy5iD7OoSe0" },
             { name: "Void Herald: Whispers of the Old Gods", class: "Priest", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=dpVd_ZBFHBI" },
+            { name: "Overflowing Light", class: "Priest", zone: "Loch Modan", faction: "Alliance", video: "https://www.youtube.com/watch?v=5CbEFIim5fk" },
+            { name: "Overflowing Light", class: "Priest", zone: "Westfall", faction: "Alliance", video: "https://www.youtube.com/watch?v=5CbEFIim5fk" },
+            { name: "Overflowing Light", class: "Priest", zone: "Silverpine Forest", faction: "Horde", video: "https://www.youtube.com/watch?v=5CbEFIim5fk" },
 
             // HUNTER
             { name: "Hydra's Sting", class: "Hunter", zone: "Ashenvale", faction: "Both", video: "https://youtu.be/aN13siREDS8" },
@@ -884,6 +997,9 @@
             { name: "Savage Momentum", class: "Hunter", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=vRssxSmz29c&list=PLdApKfDWsi1_6vR0rLLvs9KxU7eH7cb0A&index=12" },
             { name: "Fetch me their Bones!", class: "Hunter", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=Mnqmr5aZn9I&list=PLdApKfDWsi1_6vR0rLLvs9KxU7eH7cb0A&index=19" },
             { name: "Blood Tracker: Glaive Toss", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=R7iILywRS2Y&list=PLdApKfDWsi1_6vR0rLLvs9KxU7eH7cb0A&index=24" },
+            { name: "Survival Mastery", class: "Hunter", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=2YqOLvqe1bw" },
+            { name: "Fire Watch", class: "Hunter", zone: "Stonetalon Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=YoZUCzSQcZE" },
+            { name: "Steady Shooting", class: "Hunter", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=m_Az_ARENy8" },
 
             // ROGUE
             { name: "Shadow of Death", class: "Rogue", zone: "Tanaris", faction: "Both", video: "https://youtu.be/zPq77kvi_SU?si=Ocn17u99g3-x2RBJ" },
@@ -957,6 +1073,7 @@
             { name: "Long Arm of the Law", class: "Paladin", zone: "Loch Modan", faction: "Both", video: "https://youtu.be/FDH1hZJZxHc?si=_Cr085_nuiF-11wV" },
             { name: "Consecrated Weapon", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/vOgKuNMyOvA?si=vPJMeWlvSJ1gFoJk" },
             { name: "Twist of Faith", class: "Paladin", zone: "Desolace", faction: "Alliance", video: "https://youtu.be/e8Hn9ULV9AY?si=aSeYNrCxfA_8hs-Q" },
+            { name: "Twist of Faith", class: "Paladin", zone: "Desolace", faction: "Horde", video: "https://www.youtube.com/shorts/K9iaoWask9E" },
             { name: "Sword of Vengeance", class: "Paladin", zone: "The Hinterlands", faction: "Both", video: "https://youtu.be/Nw68lacS-_Q?si=26m1UMCpDoFcyLe7" },
             { name: "Execution Verdict", class: "Paladin", zone: "Badlands", faction: "Both", video: "https://youtu.be/9t6f0h9rx0c?si=XDeuprwJCQpCSO9r" },
             { name: "Hammerstorm", class: "Paladin", zone: "Eastern Plaguelands", faction: "Both", video: "https://youtu.be/uB3JQaChOWg?si=0nAjPwvCSqSpyCFL" },
@@ -991,6 +1108,7 @@
             { name: "Gift of Light", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=25yXtF5ch4M&list=PLdApKfDWsi1-KR5TJw5fzutC4DQGlfiHy&index=12" },
             { name: "Crimson Defense", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=hlBP4TdZ5fM&list=PLdApKfDWsi1-KR5TJw5fzutC4DQGlfiHy&index=32" },
             { name: "Glimmer of Light", class: "Paladin", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=3_xENisd8mg&list=PLdApKfDWsi1-KR5TJw5fzutC4DQGlfiHy&index=38" },
+            { name: "Sacred Unity", class: "Paladin", zone: "Western Plaguelands", faction: "Both", video: "" },
 
             // WARRIOR
             { name: "Victorious", class: "Warrior", zone: "The Barrens", faction: "Both", video: "https://youtu.be/-WU5IGGPeTU?si=cjdkdibIUrr6dUZp" },
@@ -1062,6 +1180,11 @@
             { name: "Overwhelming Rage", class: "Warrior", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=3r9t6NT3BrI&list=PLdApKfDWsi1_GG7rGZeHQ69lcAnJWcb3v&index=29" },
             { name: "Power Slam", class: "Warrior", zone: "Arathi Highlands", faction: "Both", video: "https://www.youtube.com/watch?v=w3BMA_9TTLM&list=PLdApKfDWsi1_GG7rGZeHQ69lcAnJWcb3v&index=33" },
             { name: "Spell Block", class: "Warrior", zone: "Dustwallow Marsh", faction: "Both", video: "https://www.youtube.com/watch?v=79uRZHLrkwA&list=PLdApKfDWsi1_GG7rGZeHQ69lcAnJWcb3v&index=38" },
+            { name: "Storm Bolt", class: "Warrior", zone: "Searing Gorge", faction: "Both", video: "" },
+            { name: "Iron Guard", class: "Warrior", zone: "Redridge Mountains", faction: "Alliance", video: "https://www.youtube.com/shorts/c26z4rAdk0c" },
+            { name: "Iron Guard", class: "Warrior", zone: "The Barrens", faction: "Horde", video: "" },
+            { name: "En Garde!", class: "Warrior", zone: "Unknown", faction: "Both", video: "" },
+            { name: "Thundering Blow", class: "Warrior", zone: "Azshara", faction: "Both", video: "" },
 
             // WARLOCK
             { name: "Eternal Torment", class: "Warlock", zone: "Western Plaguelands", faction: "Both", video: "https://www.youtube.com/watch?v=4_1IjBmp07Q" },
@@ -1125,6 +1248,7 @@
             { name: "Demonic Influence", class: "Warlock", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=6VmoJp4MXsQ&list=PLdApKfDWsi18S-Y7K-oWyJRKMZOz4y5Ry&index=18" },
             { name: "Demonic Whirl", class: "Warlock", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=0Lp1-G1izro&list=PLdApKfDWsi18S-Y7K-oWyJRKMZOz4y5Ry&index=23" },
             { name: "Demonic Siphon", class: "Warlock", zone: "Scholomance", faction: "Both", video: "https://www.youtube.com/watch?v=jHE_s13Ma7g&list=PLdApKfDWsi18S-Y7K-oWyJRKMZOz4y5Ry&index=30" },
+            { name: "Sudden Aftermath", class: "Warlock", zone: "Silverpine Forest", faction: "Both", video: "https://www.youtube.com/watch?v=p7KzhrjPyIs" },
 
             // MAGE
             { name: "Glacial Cascade", class: "Mage", zone: "Duskwood", faction: "Both", video: "https://www.youtube.com/watch?v=y5VrqOsioUA" },
@@ -1195,6 +1319,7 @@
             { name: "Touch of the Magi", class: "Mage", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=4dh5KeP7gf0&list=PLdApKfDWsi18yLtWHluSWp2EjqdMIu13W&index=21" },
             { name: "Trisolaris", class: "Mage", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=1ZKrtKogl9U&list=PLdApKfDWsi18yLtWHluSWp2EjqdMIu13W&index=26" },
             { name: "Frozen Conduit", class: "Mage", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=zPU-gy13d1s&list=PLdApKfDWsi18yLtWHluSWp2EjqdMIu13W&index=37" },
+            { name: "Impeccable Timing", class: "Mage", zone: "Dire Maul", faction: "Both", video: "https://www.youtube.com/shorts/LirHyFaJUHc" },
 
             // SHAMAN
             { name: "Tethered Power", class: "Shaman", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=M_eqCs-akuA" },
@@ -1265,8 +1390,12 @@
             { name: "Elemental Mastery", class: "Shaman", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=LUhWDqw4Bi4&list=PLdApKfDWsi19OxpycEuMOUI8hjPd87wXO&index=15" },
             { name: "Tides of Restoration", class: "Shaman", zone: "Thousand Needles", faction: "Both", video: "https://www.youtube.com/watch?v=mCuWbIZ-yBg&list=PLdApKfDWsi19OxpycEuMOUI8hjPd87wXO&index=29" },
             { name: "Hydromancer: Water Bolt", class: "Shaman", zone: "Desolace", faction: "Both", video: "https://www.youtube.com/watch?v=qtGwSOEcNQI&list=PLdApKfDWsi19OxpycEuMOUI8hjPd87wXO&index=42" },
+            { name: "Sundering", class: "Shaman", zone: "Badlands", faction: "Both", video: "https://www.youtube.com/watch?v=vkH89NPCdrE" },
+            { name: "Air Ascendance", class: "Shaman", zone: "Tanaris", faction: "Both", video: "https://www.youtube.com/watch?v=gczv7h-noME" },
+            { name: "Mastery of the Tide", class: "Shaman", zone: "Stranglethorn Vale", faction: "Both", video: "" },
 
             // DRUID
+            { name: "Counterpoise", class: "Druid", zone: "The Barrens", faction: "Both", video: "https://youtu.be/azFFXpGhpcc?si=kVrVx6yOKC0p9unX" },
             { name: "Razor-Sharp Claws", class: "Druid", zone: "Winterspring", faction: "Both", video: "https://www.youtube.com/watch?v=oVcg8kWiDUc" },
             { name: "Nature's Synthesis", class: "Druid", zone: "Swamp of Sorrows", faction: "Both", video: "https://www.youtube.com/watch?v=gzCj95bsuV8" },
             { name: "Languish", class: "Druid", zone: "Silithus", faction: "Both", video: "https://www.youtube.com/watch?v=_jV951Eh77E" },
@@ -1332,10 +1461,15 @@
             { name: "Stampeding Roar", class: "Druid", zone: "The Hinterlands", faction: "Both", video: "https://www.youtube.com/watch?v=GcP9dCbWU_I" },
             { name: "Solar Beam", class: "Druid", zone: "Azshara", faction: "Both", video: "https://www.youtube.com/watch?v=-Wj5FETceFk" },
             { name: "Frenzied Growth", class: "Druid", zone: "Un`Goro Crater", faction: "Both", video: "https://www.youtube.com/watch?v=AjzsvTwFqaM" },
-            { name: "Ironfur", class: "Druid", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=ODiHI47pjRc&list=PLdApKfDWsi1-YnlzstjkV0HbgDw3hZrAq&index=14" },
+            { name: "Iron Fur", class: "Druid", zone: "Feralas", faction: "Both", video: "https://www.youtube.com/watch?v=ODiHI47pjRc&list=PLdApKfDWsi1-YnlzstjkV0HbgDw3hZrAq&index=14" },
             { name: "Predator's Wrath: Combo", class: "Druid", zone: "Ashenvale", faction: "Both", video: "https://www.youtube.com/watch?v=vjIgu863M28&list=PLdApKfDWsi1-YnlzstjkV0HbgDw3hZrAq&index=35" },
             { name: "Nature's Abundance", class: "Druid", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=AjzsvTwFqaM" },
             { name: "Ambush Predator", class: "Druid", zone: "Stranglethorn Vale", faction: "Both", video: "https://www.youtube.com/watch?v=o0JLK6R_CEc&list=PLdApKfDWsi1-YnlzstjkV0HbgDw3hZrAq&index=43" },
+            { name: "Moon's Wrath", class: "Druid", zone: "The Barrens", faction: "Both", video: "https://www.youtube.com/watch?v=7eIIdTdm7Zg" },
+            { name: "Omen of Doom", class: "Druid", zone: "The Wailing Caverns", faction: "Both", video: "https://www.youtube.com/watch?v=khfGtQDfzs8" },
+            { name: "Omen of Fatality", class: "Druid", zone: "Ashenvale", faction: "Both", video: "" },
+            { name: "Tiger's Instinct", class: "Druid", zone: "Stonetalon Mountains", faction: "Alliance", video: "" },
+            { name: "Tiger's Instinct", class: "Druid", zone: "Ashenvale", faction: "Horde", video: "" }
         ];
 
         let collectedNames = JSON.parse(localStorage.getItem('ascension_save_v1')) || [];
@@ -1438,19 +1572,52 @@
                 const cleanName = e.name.replace(/:/g, "");
                 // Escape name for JS string
                 const safeName = e.name.replace(/'/g, "\\'");
-                const iconHTML = `<img src="Icons/${cleanName}.png" class="spell-icon" onerror="handleIconError(this, '${safeName}')">`;
+                const iconHTML = `<img src="icons/${cleanName}.png" class="spell-icon" onerror="handleIconError(this, '${safeName}')">`;
+
+                const mapSuffix = e.faction === "Both" ? "" : ` ${e.faction}`;
+                const mapFile = `${e.name} Location${mapSuffix}.png`;
+
+                let guideBtn = `<a href="javascript:void(0)" class="btn-unknown check-map" data-map="Nonvid Locations/${mapFile}" onclick="return false;">UNKNOWN</a>`;
+
+                if (e.video) {
+                    guideBtn = `<a href="${e.video}" target="_blank" class="btn-video">WATCH</a>`;
+                }
 
                 row.innerHTML = `
-                <td><button class="btn-action ${isColl ? 'btn-remove' : 'btn-collect'}" onclick="toggleRE('${e.name.toLowerCase()}', ${!isColl})">${isColl ? '✕' : '✓'}</button></td>
+                <td><button class="btn-action ${isColl ? 'btn-remove' : 'btn-collect'}" onclick="toggleRE('${e.name.toLowerCase().replace(/'/g, "\\'")}', ${!isColl})">${isColl ? '✕' : '✓'}</button></td>
                 <td style="font-weight:600"><div style="display: flex; align-items: center;">${iconHTML}${e.name}</div></td>
                 <td><img src="https://wow.zamimg.com/images/wow/icons/small/${classData[e.class]}.jpg" class="icon-class"><span>${e.class}</span></td>
                 <td>${factHTML}</td>
                 <td style="color:var(--text-dim)">${e.zone}</td>
-                <td>${e.video ? `<a href="${e.video}" target="_blank" class="btn-video">WATCH</a>` : '<span style="color:#333">—</span>'}</td>
+                <td>${guideBtn}</td>
             `;
                 body.appendChild(row);
             });
             updateRegionDropdown(factionPool);
+            checkMapsVisibility();
+        }
+
+        function checkMapsVisibility() {
+            document.querySelectorAll('.check-map').forEach(btn => {
+                // Prevent checking multiple times if we had a lot of re-renders
+                if (btn.dataset.checked === "true") return;
+
+                const img = new Image();
+                const mapPath = btn.getAttribute('data-map');
+                btn.dataset.checked = "true";
+
+                img.onload = () => {
+                    btn.className = 'btn-map';
+                    btn.innerText = 'MAP';
+                    btn.href = mapPath;
+                    btn.onclick = null;
+                    btn.target = '_blank';
+                };
+                img.onerror = () => {
+                    // Stays UNKNOWN
+                };
+                img.src = mapPath;
+            });
         }
 
         function toggleRE(name, add) {
@@ -1474,7 +1641,7 @@
             // 1. Try Stripped PNG (default initial src)
             // 2. Try Stripped JPG
             if (currentSrc.endsWith(`${cleanName}.png`)) {
-                img.src = `Icons/${cleanName}.jpg`;
+                img.src = `icons/${cleanName}.jpg`;
                 return;
             }
             // 3. Try Hyphenated PNG
@@ -1483,12 +1650,12 @@
                     img.style.display = 'none';
                     return;
                 }
-                img.src = `Icons/${hyphenName}.png`;
+                img.src = `icons/${hyphenName}.png`;
                 return;
             }
             // 4. Try Hyphenated JPG
             if (currentSrc.endsWith(`${hyphenName}.png`)) {
-                img.src = `Icons/${hyphenName}.jpg`;
+                img.src = `icons/${hyphenName}.jpg`;
                 return;
             }
             // 5. Give up
@@ -1639,7 +1806,4 @@
     </script>
 </body>
 
-
 </html>
-
-
