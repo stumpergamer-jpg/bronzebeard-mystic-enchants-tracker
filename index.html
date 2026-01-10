@@ -1566,7 +1566,7 @@
                 const row = document.createElement('tr');
                 if (isColl) row.className = 'collected';
                 if (isColl) row.className = 'collected';
-                const factHTML = e.faction === "Both" ? `<img src="${icons.alliance}" class="fac-icon"><img src="${icons.horde}" class="fac-icon">` : `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`;
+                const factHTML = e.faction === "Both" ? `<img src="${Icons.alliance}" class="fac-icon"><img src="${Icons.horde}" class="fac-icon">` : `<img src="${Icons[e.faction.toLowerCase()]}" class="fac-icon">`;
 
                 // LOGIQUE ICONE INTÉGRÉE
                 const cleanName = e.name.replace(/:/g, "");
@@ -1641,7 +1641,7 @@
             // 1. Try Stripped PNG (default initial src)
             // 2. Try Stripped JPG
             if (currentSrc.endsWith(`${cleanName}.png`)) {
-                img.src = `icons/${cleanName}.jpg`;
+                img.src = `Icons/${cleanName}.jpg`;
                 return;
             }
             // 3. Try Hyphenated PNG
@@ -1650,12 +1650,12 @@
                     img.style.display = 'none';
                     return;
                 }
-                img.src = `icons/${hyphenName}.png`;
+                img.src = `Icons/${hyphenName}.png`;
                 return;
             }
             // 4. Try Hyphenated JPG
             if (currentSrc.endsWith(`${hyphenName}.png`)) {
-                img.src = `icons/${hyphenName}.jpg`;
+                img.src = `Icons/${hyphenName}.jpg`;
                 return;
             }
             // 5. Give up
@@ -1807,3 +1807,4 @@
 </body>
 
 </html>
+
