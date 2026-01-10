@@ -1641,21 +1641,35 @@
             // 1. Try Stripped PNG (default initial src)
             // 2. Try Stripped JPG
             if (currentSrc.endsWith(`${cleanName}.png`)) {
-                img.src = `Icons/${cleanName}.jpg`;
+                img.src = `icons/${cleanName}.jpg`;
                 return;
             }
-            // 3. Try Hyphenated PNG
+
+            // 3. Try Lowercase PNG (Fix for case-sensitivity on GitHub Pages)
+            // Example: "Iron Fur" -> "iron fur.png"
             if (currentSrc.endsWith(`${cleanName}.jpg`)) {
+                img.src = `icons/${cleanName.toLowerCase()}.png`;
+                return;
+            }
+
+            // 4. Try Lowercase JPG
+            if (currentSrc.endsWith(`${cleanName.toLowerCase()}.png`)) {
+                img.src = `icons/${cleanName.toLowerCase()}.jpg`;
+                return;
+            }
+
+            // 5. Try Hyphenated PNG
+            if (currentSrc.endsWith(`${cleanName.toLowerCase()}.jpg`)) {
                 if (cleanName === hyphenName) {
                     img.style.display = 'none';
                     return;
                 }
-                img.src = `Icons/${hyphenName}.png`;
+                img.src = `icons/${hyphenName}.png`;
                 return;
             }
             // 4. Try Hyphenated JPG
             if (currentSrc.endsWith(`${hyphenName}.png`)) {
-                img.src = `Icons/${hyphenName}.jpg`;
+                img.src = `icons/${hyphenName}.jpg`;
                 return;
             }
             // 5. Give up
@@ -1807,5 +1821,3 @@
 </body>
 
 </html>
-
-
