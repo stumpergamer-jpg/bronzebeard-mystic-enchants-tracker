@@ -1637,12 +1637,6 @@
             const cleanName = originalName.replace(/:/g, "");
             const lowerName = cleanName.toLowerCase();
 
-            // Generate list of candidates to try in order
-            // 1. Original Name PNG (Default HTML src)
-            // 2. Original Name JPG
-            // 3. Lowercase PNG
-            // 4. Lowercase JPG
-
             const candidates = [`icons/${cleanName}.png`];
 
             const tryJpg = `icons/${cleanName}.jpg`;
