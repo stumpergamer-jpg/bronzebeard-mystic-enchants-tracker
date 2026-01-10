@@ -1634,46 +1634,41 @@
         }
 
         function handleIconError(img, originalName) {
-            const currentSrc = decodeURIComponent(img.src);
             const cleanName = originalName.replace(/:/g, "");
-            const hyphenName = originalName.replace(/:/g, "-");
+            const lowerName = cleanName.toLowerCase();
 
-            // 1. Try Stripped PNG (default initial src)
-            // 2. Try Stripped JPG
-            if (currentSrc.endsWith(`${cleanName}.png`)) {
-                img.src = `icons/${cleanName}.jpg`;
-                return;
+            // Generate list of candidates to try in order
+            // 1. Original Name PNG (Default HTML src)
+            // 2. Original Name JPG
+            // 3. Lowercase PNG
+            // 4. Lowercase JPG
+
+            const candidates = [`icons/${cleanName}.png`];
+
+            const tryJpg = `icons/${cleanName}.jpg`;
+            if (!candidates.includes(tryJpg)) candidates.push(tryJpg);
+
+            if (cleanName !== lowerName) {
+                const tryLowerPng = `icons/${lowerName}.png`;
+                if (!candidates.includes(tryLowerPng)) candidates.push(tryLowerPng);
+
+                const tryLowerJpg = `icons/${lowerName}.jpg`;
+                if (!candidates.includes(tryLowerJpg)) candidates.push(tryLowerJpg);
             }
 
-            // 3. Try Lowercase PNG (Fix for case-sensitivity on GitHub Pages)
-            // Example: "Iron Fur" -> "iron fur.png"
-            if (currentSrc.endsWith(`${cleanName}.jpg`)) {
-                img.src = `icons/${cleanName.toLowerCase()}.png`;
-                return;
-            }
+            // Determine which attempt just failed
+            // If attempt attribute is missing, it means the initial HTML src (Index 0) failed.
+            let currentAttempt = parseInt(img.dataset.attempt || '0');
+            let nextIndex = currentAttempt + 1;
 
-            // 4. Try Lowercase JPG
-            if (currentSrc.endsWith(`${cleanName.toLowerCase()}.png`)) {
-                img.src = `icons/${cleanName.toLowerCase()}.jpg`;
-                return;
+            if (nextIndex < candidates.length) {
+                // Try the next candidate
+                img.dataset.attempt = nextIndex;
+                img.src = candidates[nextIndex];
+            } else {
+                // All candidates failed, hide image
+                img.style.display = 'none';
             }
-
-            // 5. Try Hyphenated PNG
-            if (currentSrc.endsWith(`${cleanName.toLowerCase()}.jpg`)) {
-                if (cleanName === hyphenName) {
-                    img.style.display = 'none';
-                    return;
-                }
-                img.src = `icons/${hyphenName}.png`;
-                return;
-            }
-            // 4. Try Hyphenated JPG
-            if (currentSrc.endsWith(`${hyphenName}.png`)) {
-                img.src = `icons/${hyphenName}.jpg`;
-                return;
-            }
-            // 5. Give up
-            img.style.display = 'none';
         }
 
         function exportData() {
