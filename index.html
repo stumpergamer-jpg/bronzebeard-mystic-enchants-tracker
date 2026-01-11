@@ -1568,10 +1568,10 @@
             });
 
             body.innerHTML = "";
+            const fragment = document.createDocumentFragment();
             filtered.forEach(e => {
                 const isColl = collectedNames.includes(e.name.toLowerCase());
                 const row = document.createElement('tr');
-                if (isColl) row.className = 'collected';
                 if (isColl) row.className = 'collected';
                 const factHTML = e.faction === "Both" ? `<img src="${icons.alliance}" class="fac-icon"><img src="${icons.horde}" class="fac-icon">` : `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`;
 
@@ -1598,8 +1598,9 @@
                 <td style="color:var(--text-dim)">${e.zone}</td>
                 <td>${guideBtn}</td>
             `;
-                body.appendChild(row);
+                fragment.appendChild(row);
             });
+            body.appendChild(fragment);
             updateRegionDropdown(factionPool);
             checkMapsVisibility();
         }
@@ -1640,37 +1641,6 @@
             hasUnsavedChanges ? btn.classList.add('btn-save-unsaved') : btn.classList.remove('btn-save-unsaved');
         }
 
-        function handleIconError(img, originalName) {
-            const cleanName = originalName.replace(/:/g, "");
-            const lowerName = cleanName.toLowerCase();
-
-            const candidates = [`icons/${cleanName}.png`];
-
-            const tryJpg = `icons/${cleanName}.jpg`;
-            if (!candidates.includes(tryJpg)) candidates.push(tryJpg);
-
-            if (cleanName !== lowerName) {
-                const tryLowerPng = `icons/${lowerName}.png`;
-                if (!candidates.includes(tryLowerPng)) candidates.push(tryLowerPng);
-
-                const tryLowerJpg = `icons/${lowerName}.jpg`;
-                if (!candidates.includes(tryLowerJpg)) candidates.push(tryLowerJpg);
-            }
-
-            // Determine which attempt just failed
-            // If attempt attribute is missing, it means the initial HTML src (Index 0) failed.
-            let currentAttempt = parseInt(img.dataset.attempt || '0');
-            let nextIndex = currentAttempt + 1;
-
-            if (nextIndex < candidates.length) {
-                // Try the next candidate
-                img.dataset.attempt = nextIndex;
-                img.src = candidates[nextIndex];
-            } else {
-                // All candidates failed, hide image
-                img.style.display = 'none';
-            }
-        }
 
         function exportData() {
             const blob = new Blob([JSON.stringify(collectedNames)], { type: 'application/json' });
