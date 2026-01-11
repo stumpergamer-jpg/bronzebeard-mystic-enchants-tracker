@@ -1,4 +1,4 @@
-# 📜 User Guide - Mystic Enchants Tracker (v1.4)
+# 📜 User Guide - Mystic Enchants Tracker (v1.5)
 
 Welcome to the **Mystic Enchants Tracker**, the ultimate tool to track your enchantment collection progress on WoW Ascension.
 
@@ -12,19 +12,20 @@ Simply double-click the `index.html` file to launch the application in your web 
 ### 1. Progress Tracking ("Collect")
 *   **Collect a spell**: Click the **"Collect"** button (or "✓ Collect" text) on the left of each row. The row will turn green.
 *   **Remove a spell**: Click the **"✕"** button to uncollect.
-*   **Progress Bars**: Your progress is calculated in real-time at the top of the page:
-    *   **Global**: All spells combined.
-    *   **Class**: Only for the selected class.
-    *   **Region**: Only for the selected region.
+*   **Progress Bars**: Your progress is calculated in real-time at the top of the page. The labels are dynamic:
+    *   **Global/Faction**: Shows "Alliance Progress" or "Horde Progress" when a faction is selected.
+    *   **Class**: Displays the name and **icon** of the selected class.
+    *   **Region**: Displays the specific name of the selected region.
 
 ### 2. Filtering & Search
 Use the top bar to find what you are looking for:
 *   **Search**: Type a spell name or zone to filter the list instantly.
-*   **Faction**: Filter by **ALL**, **Alliance**, or **Horde**.
+*   **Faction**: Filter by **BOTH**, **Alliance**, or **Horde**.
 *   **Class**: Show only spells for a specific class (e.g., Druid, Warrior...).
 *   **Region**: Filter by geographic zone (e.g., Ashenvale, Eastern Kingdoms...).
+*   **Language**: Support for **English, French, Spanish, German, and Italian**.
 
-### 3. Guides & Locations (New in v1.4)
+### 3. Guides & Locations (Updated in v1.5)
 The rightmost **"Guide"** column helps you find enchantments:
 *   🟥 **WATCH**: Opens a YouTube video showing the exact location.
 *   🟩 **MAP**: Opens a map image (if available in the `Nonvid Locations` folder).
@@ -39,7 +40,10 @@ Your data is automatically saved in your browser.
 *   **✗ Collect None**: Resets (unchecks) ALL displayed spells.
 
 ### 5. Report a Bug
-A **⚠️ Report Bug** button allows you to open a form to note an issue (dead link, missing spell, etc.).
+A **⚠️ Report Bug** button allows you to open a form to note an issue (dead link, missing spell, etc.). It pre-fills information about your current selection.
+
+### 6. Undo Feature
+Mistakenly collected a spell? Click the **↩️ Undo** button to revert your last check/uncheck action.
 
 ---
 
@@ -57,8 +61,8 @@ If you want to add your own maps:
 ## 🙏 Acknowledgements & Credits
 
 Huge thanks to our content creators who make these guides possible:
-*   **shadowmeldgg** -> https://www.youtube.com/@shadowmeldgg
-*   **WhiterBronzebeard** -> https://www.youtube.com/@WhiterBronzebeard
+*   **shadowmeldgg**
+*   **WhiterBronzebeard**
 
 Don't forget to **Like & Subscribe** to their channels to support their amazing work!
 
