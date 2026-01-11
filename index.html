@@ -877,6 +877,13 @@
         };
         const icons = { alliance: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-alliance.jpg", horde: "https://wow.zamimg.com/images/wow/icons/medium/pvpcurrency-honor-horde.jpg" };
 
+        // Handle spell icon loading errors
+        function handleIconError(img, spellName) {
+            // Hide the broken icon image
+            img.style.display = 'none';
+            console.warn(`Icon not found for spell: ${spellName}`);
+        }
+
         let enchants = [
             // PRIEST
             { name: "Renewed through Absolution", class: "Priest", zone: "Alterac Mountains", faction: "Both", video: "https://www.youtube.com/watch?v=ATlQH4N9Zqs" },
@@ -1572,7 +1579,7 @@
                 const cleanName = e.name.replace(/:/g, "");
                 // Escape name for JS string
                 const safeName = e.name.replace(/'/g, "\\'");
-                const iconHTML = `<img src="icons/${cleanName}.png" class="spell-icon" onerror="handleIconError(this, '${safeName}')">`;
+                const iconHTML = `<img src="Icons/${cleanName}.png" class="spell-icon" onerror="handleIconError(this, '${safeName}')">`;
 
                 const mapSuffix = e.faction === "Both" ? "" : ` ${e.faction}`;
                 const mapFile = `${e.name} Location${mapSuffix}.png`;
