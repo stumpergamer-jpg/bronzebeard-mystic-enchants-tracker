@@ -2039,7 +2039,7 @@
                     `<img src="${icons[e.faction.toLowerCase()]}" class="fac-icon">`;
 
                 const mapSuffix = e.faction === "Both" ? "" : ` ${e.faction}`;
-                const mapPath = `nonvid Locations/${e.name} Location${mapSuffix}.png`;
+                const mapPath = `Nonvid Locations/${e.name} Location${mapSuffix}.png`;
 
                 let guideBtn = `<a class="check-map btn-unknown" data-map="${mapPath.replace(/"/g, '&quot;')}">${translations[currentLang].btn_unknown}</a>`;
                 if (e.video) {
@@ -2295,5 +2295,6 @@
 </body>
 
 </html>
+
 
 
