@@ -879,17 +879,9 @@
 
         // Handle spell icon loading errors
         function handleIconError(img, spellName) {
-            // Check if we already tried JPG format
-            if (img.src.endsWith('.png')) {
-                // Try JPG format as fallback
-                const jpgSrc = img.src.replace('.png', '.jpg');
-                img.src = jpgSrc;
-                console.log(`Trying JPG format for spell: ${spellName}`);
-            } else {
-                // Both formats failed, hide the icon
-                img.style.display = 'none';
-                console.warn(`Icon not found for spell: ${spellName} (tried both PNG and JPG)`);
-            }
+            // All icons are now PNG, so just hide if not found
+            img.style.display = 'none';
+            console.warn(`Icon not found for spell: ${spellName}`);
         }
 
         let enchants = [
