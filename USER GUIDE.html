@@ -187,11 +187,12 @@
             <button class="lang-btn" onclick="setLang('en')"><span class="flag">🇬🇧</span> English</button>
             <button class="lang-btn" onclick="setLang('es')"><span class="flag">🇪🇸</span> Español</button>
             <button class="lang-btn" onclick="setLang('de')"><span class="flag">🇩🇪</span> Deutsch</button>
+            <button class="lang-btn" onclick="setLang('it')"><span class="flag">🇮🇹</span> Italiano</button>
         </div>
 
         <!-- FRANÇAIS -->
         <div id="fr" class="content-section active">
-            <h1>📜 Guide d'Utilisation - Mystic Enchants Tracker (v1.4)</h1>
+            <h1>📜 Guide d'Utilisation - Mystic Enchants Tracker (v1.5)</h1>
             <p>Bienvenue sur le <strong>Mystic Enchants Tracker</strong>, l'outil ultime pour suivre votre progression
                 dans la collecte des enchantements sur WoW Ascension.</p>
 
@@ -210,23 +211,32 @@
                     "✓ Collect") à gauche de chaque ligne. La ligne deviendra verte.</li>
                 <li><strong>Retirer un sort</strong> : Cliquez sur le bouton <strong>"✕"</strong> pour annuler la
                     collecte.</li>
-                <li><strong>Barres de progression</strong> : Vos progrès sont calculés en temps réel en haut de page
-                    (Global, Class, Region).</li>
+                <li><strong>Barres de progression</strong> : Vos progrès sont calculés en tempo réel. Les titres sont
+                    dynamiques :
+                    <ul>
+                        <li><strong>Global/Faction</strong> : Affiche "Progression Alliance" ou "Progression Horde"
+                            selon le filtre.</li>
+                        <li><strong>Classe</strong> : Affiche le nom et <strong>l'icône</strong> de la classe
+                            sélectionnée.</li>
+                        <li><strong>Région</strong> : Affiche le nom spécifique de la région sélectionnée.</li>
+                    </ul>
+                </li>
             </ul>
 
             <h3>2. Filtrage & Recherche</h3>
             <ul>
                 <li><strong>Search</strong> : Tapez le nom d'un sort ou d'une zone pour filtrer instantanément la liste.
                 </li>
-                <li><strong>Faction</strong> : Filtrez par <strong>ALL</strong>, <strong>Alliance</strong>, ou
+                <li><strong>Faction</strong> : Filtrez par <strong>LES DEUX</strong>, <strong>Alliance</strong>, ou
                     <strong>Horde</strong>.
                 </li>
-                <li><strong>Class</strong> : Affichez uniquement les sorts d'une classe spécifique (ex: Druid,
-                    Warrior...).</li>
-                <li><strong>Region</strong> : Filtrez par zone géographique (ex: Ashenvale, Eastern Kingdoms...).</li>
+                <li><strong>Class</strong> : Affichez uniquement les sorts d'une classe spécifique.</li>
+                <li><strong>Region</strong> : Filtrez par zone géographique (ex: Orneval...).</li>
+                <li><strong>Langue</strong> : Support complet de <strong>l'Anglais, Français, Espagnol, Allemand et
+                        Italien</strong>.</li>
             </ul>
 
-            <h3>3. Guides & Localisations (Nouveau en v1.4)</h3>
+            <h3>3. Guides & Localisations (Mis à jour v1.5)</h3>
             <p>La colonne de droite <strong>"Guide"</strong> vous aide à trouver les enchantements :</p>
             <ul>
                 <li><span class="btn-fake red">WATCH</span> : Ouvre une vidéo YouTube montrant l'emplacement exact.</li>
@@ -249,8 +259,12 @@
             </ul>
 
             <h3>5. Signaler un Bug</h3>
-            <p>Un bouton <strong>⚠️ Report Bug</strong> permet d'afficher un formulaire pour noter un problème (lien
-                mort, sort manquant, etc.).</p>
+            <p>Un bouton <strong>⚠️ Report Bug</strong> permet d'ouvrir un formulaire. Il pré-remplit les informations
+                selon vos filtres actuels.</p>
+
+            <h3>6. Système d'Annulation (Undo)</h3>
+            <p>L'icône <strong>↩️ Défaire</strong> permet d'annuler vos dernières modifications (jusqu'à 20 actions).
+            </p>
 
             <hr>
 
@@ -258,7 +272,7 @@
             <p>Si vous souhaitez ajouter vos propres cartes :</p>
             <ol>
                 <li>Prenez une capture d'écran de l'emplacement.</li>
-                <li>Nommez l'image exactement comme le sort, suivi de "Location".Exemple :
+                <li>Nommez l'image exactement comme le sort, suivi de "Location". Exemple :
                     <code>Omen of Fatality Location.png</code>. Si spécifique à une faction :
                     <code>Nom Sort Location Alliance.png</code>.
                 </li>
@@ -282,7 +296,7 @@
 
         <!-- ENGLISH -->
         <div id="en" class="content-section">
-            <h1>📜 User Guide - Mystic Enchants Tracker (v1.4)</h1>
+            <h1>📜 User Guide - Mystic Enchants Tracker (v1.5)</h1>
             <p>Welcome to the <strong>Mystic Enchants Tracker</strong>, the ultimate tool to track your enchantment
                 collection progress on WoW Ascension.</p>
 
@@ -296,24 +310,33 @@
 
             <h3>1. Progress Tracking ("Collect")</h3>
             <ul>
-                <li><strong>Collect a spell</strong>: Click the <strong>"Collect"</strong> button (or "✓ Collect" text)
-                    on the left of each row. The row will turn green.</li>
+                <li><strong>Collect a spell</strong>: Click the <strong>"Collect"</strong> button on the left of each
+                    row. The row will turn green.</li>
                 <li><strong>Remove a spell</strong>: Click the <strong>"✕"</strong> button to uncollect.</li>
-                <li><strong>Progress Bars</strong>: Your progress is calculated in real-time at the top (Global, Class,
-                    Region).</li>
+                <li><strong>Progress Bars</strong>: Your progress is calculated in real-time. The labels are dynamic:
+                    <ul>
+                        <li><strong>Global/Faction</strong>: Shows "Alliance Progress" or "Horde Progress" when a
+                            faction is selected.</li>
+                        <li><strong>Class</strong>: Displays the name and <strong>icon</strong> of the selected class.
+                        </li>
+                        <li><strong>Region</strong>: Displays the specific name of the selected region.</li>
+                    </ul>
+                </li>
             </ul>
 
             <h3>2. Filtering & Search</h3>
             <ul>
                 <li><strong>Search</strong>: Type a spell name or zone to filter the list instantly.</li>
-                <li><strong>Faction</strong>: Filter by <strong>ALL</strong>, <strong>Alliance</strong>, or
+                <li><strong>Faction</strong>: Filter by <strong>BOTH</strong>, <strong>Alliance</strong>, or
                     <strong>Horde</strong>.
                 </li>
-                <li><strong>Class</strong>: Show only spells for a specific class (e.g., Druid, Warrior...).</li>
-                <li><strong>Region</strong>: Filter by geographic zone (e.g., Ashenvale, Eastern Kingdoms...).</li>
+                <li><strong>Class</strong>: Show only spells for a specific class.</li>
+                <li><strong>Region</strong>: Filter by geographic zone (e.g., Ashenvale...).</li>
+                <li><strong>Language</strong>: Support for <strong>English, French, Spanish, German, and
+                        Italian</strong>.</li>
             </ul>
 
-            <h3>3. Guides & Locations (New in v1.4)</h3>
+            <h3>3. Guides & Locations (Updated v1.5)</h3>
             <p>The rightmost <strong>"Guide"</strong> column helps you find enchantments:</p>
             <ul>
                 <li><span class="btn-fake red">WATCH</span>: Opens a YouTube video showing the exact location.</li>
@@ -327,7 +350,6 @@
             <h3>4. Save & Data</h3>
             <ul>
                 <li><strong>💾 Save</strong>: Exports your current progress to a <code>.json</code> file.
-                    <strong>Recommended to do this regularly!</strong>
                 </li>
                 <li><strong>📂 Load</strong>: Loads a previously saved <code>.json</code> file.</li>
                 <li><strong>✓ Collect All</strong>: Marks ALL displayed spells as collected.</li>
@@ -335,12 +357,16 @@
             </ul>
 
             <h3>5. Report a Bug</h3>
-            <p>A <strong>⚠️ Report Bug</strong> button allows you to open a form to note an issue.</p>
+            <p>A <strong>⚠️ Report Bug</strong> button allows you to open a form. It pre-fills information about your
+                current selection.</p>
+
+            <h3>6. Undo Feature</h3>
+            <p>Click the <strong>↩️ Undo</strong> button to revert your last check/uncheck action.</p>
 
             <hr>
 
             <h2>📂 Image Management (For Advanced Users)</h2>
-            <p>If you want to add your own maps:</p>
+            <p>To add your own maps:</p>
             <ol>
                 <li>Take a screenshot.</li>
                 <li>Name it like the spell + "Location" (e.g., <code>SpellName Location.png</code>).</li>
@@ -363,7 +389,7 @@
 
         <!-- SPANISH -->
         <div id="es" class="content-section">
-            <h1>📜 Guía del Usuario - Mystic Enchants Tracker (v1.4)</h1>
+            <h1>📜 Guía del Usuario - Mystic Enchants Tracker (v1.5)</h1>
             <p>Bienvenido al <strong>Mystic Enchants Tracker</strong>, la herramienta definitiva para seguir tu progreso
                 en WoW Ascension.</p>
 
@@ -377,27 +403,28 @@
             <h3>1. Seguimiento ("Collect")</h3>
             <ul>
                 <li><strong>Recolectar</strong>: Haz clic en <strong>"Collect"</strong>. La fila se vuelve verde.</li>
-                <li><strong>Eliminar</strong>: Haz clic en <strong>"✕"</strong>.</li>
-                <li><strong>Progreso</strong>: Se calcula en tiempo real (Global, Clase, Región).</li>
+                <li><strong>Eliminar</strong>: Haz clic en <strong>"✕"</strong> para desmarcarlo.</li>
+                <li><strong>Progreso</strong>: Se calcula en tiempo real. Las etiquetas son dinámicas (Facción, Clase e
+                    Icono, Región).</li>
             </ul>
 
             <h3>2. Filtrado y Búsqueda</h3>
             <ul>
                 <li><strong>Search</strong>: Escribe nombre o zona.</li>
-                <li><strong>Faction</strong>: Filtra por <strong>ALL</strong>, <strong>Alliance</strong>, o
+                <li><strong>Faction</strong>: Filtra por <strong>AMBOS</strong>, <strong>Alliance</strong>, o
                     <strong>Horde</strong>.
                 </li>
                 <li><strong>Class</strong>: Filtra por clase.</li>
                 <li><strong>Region</strong>: Filtra por zona geográfica.</li>
+                <li><strong>Idioma</strong>: Soporte para <strong>Inglés, Francés, Español, Alemán e Italiano</strong>.
+                </li>
             </ul>
 
-            <h3>3. Guías y Ubicaciones (Nuevo en v1.4)</h3>
+            <h3>3. Guías y Ubicaciones (v1.5)</h3>
             <ul>
                 <li><span class="btn-fake red">WATCH</span>: Abre video de YouTube.</li>
                 <li><span class="btn-fake green">MAP</span>: Abre imagen del mapa (si existe en
-                    <code>Nonvid Locations</code>).
-                </li>
-                <li><span class="btn-fake grey">UNKNOWN</span>: No hay información disponible.</li>
+                    <code>Nonvid Locations</code>).</li>
             </ul>
 
             <h3>4. Guardar y Datos</h3>
@@ -406,20 +433,23 @@
                 <li><strong>📂 Load</strong>: Carga archivo guardado.</li>
             </ul>
 
+            <h3>5. Informar un Bug</h3>
+            <p>El botón <strong>⚠️ Informar Bug</strong> abre un formulario pre-rellenado.</p>
+
+            <h3>6. Función Deshacer (Undo)</h3>
+            <p>Usa <strong>↩️ Deshacer</strong> para revertir tu última acción.</p>
+
             <div class="community-box">
                 <h2>🙏 Agradecimientos</h2>
-                <p>Gracias a <a href="https://www.youtube.com/@shadowmeldgg"
-                        target="_blank"><strong>shadowmeldgg</strong></a> & <a
-                        href="https://www.youtube.com/@WhiterBronzebeard"
-                        target="_blank"><strong>WhiterBronzebeard</strong></a>.</p>
-                <p>¡No olvides <strong>Dar Like y Suscribirte</strong>!</p>
+                <p>Gracias a shadowmeldgg & WhiterBronzebeard.</p>
+                <p>¡No olvides Suscribirte!</p>
                 <p><em>Creado con ❤️ por la comunidad.</em></p>
             </div>
         </div>
 
         <!-- GERMAN -->
         <div id="de" class="content-section">
-            <h1>📜 Benutzerhandbuch - Mystic Enchants Tracker (v1.4)</h1>
+            <h1>📜 Benutzerhandbuch - Mystic Enchants Tracker (v1.5)</h1>
             <p>Willkommen beim <strong>Mystic Enchants Tracker</strong>.</p>
 
             <h2>🚀 Schnellstart</h2>
@@ -433,25 +463,24 @@
             <ul>
                 <li><strong>Sammeln</strong>: Klicke auf <strong>"Collect"</strong>.</li>
                 <li><strong>Entfernen</strong>: Klicke auf <strong>"✕"</strong>.</li>
-                <li><strong>Fortschritt</strong>: Echtzeit-Berechnung (Global, Klasse, Region).</li>
+                <li><strong>Fortschritt</strong>: Echtzeit-Berechnung. Die Beschriftungen sind dynamisch (Fraktion,
+                    Klasse + Symbol, Region).</li>
             </ul>
 
             <h3>2. Filtern & Suchen</h3>
             <ul>
                 <li><strong>Search</strong>: Suche nach Name oder Zone.</li>
-                <li><strong>Faction</strong>: Filtere nach <strong>ALL</strong>, <strong>Alliance</strong>, oder
-                    <strong>Horde</strong>.
-                </li>
+                <li><strong>Faction</strong>: Filtere nach <strong>BEIDE</strong>, <strong>Alliance</strong>, oder
+                    <strong>Horde</strong>.</li>
                 <li><strong>Class</strong>: Nach Klasse filtern.</li>
-                <li><strong>Region</strong>: Nach Region filtern.</li>
+                <li><strong>Sprache</strong>: Unterstützung für <strong>Englisch, Französisch, Spanisch, Deutsch und
+                        Italienisch</strong>.</li>
             </ul>
 
-            <h3>3. Guides & Standorte (Neu in v1.4)</h3>
+            <h3>3. Guides & Standorte (v1.5)</h3>
             <ul>
                 <li><span class="btn-fake red">WATCH</span>: Öffnet YouTube-Video.</li>
-                <li><span class="btn-fake green">MAP</span>: Öffnet Kartenbild (falls in <code>Nonvid Locations</code>
-                    vorhanden).</li>
-                <li><span class="btn-fake grey">UNKNOWN</span>: Keine Info verfügbar.</li>
+                <li><span class="btn-fake green">MAP</span>: Öffnet Kartenbild (aus <code>Nonvid Locations</code>).</li>
             </ul>
 
             <h3>4. Speichern & Daten</h3>
@@ -460,14 +489,73 @@
                 <li><strong>📂 Load</strong>: Lädt gespeicherte Datei.</li>
             </ul>
 
+            <h3>5. Fehler melden</h3>
+            <p>Button <strong>⚠️ Fehler Melden</strong> öffnet ein vorausgefülltes Formular.</p>
+
+            <h3>6. Rückgängig-Funktion</h3>
+            <p>Nutze <strong>↩️ Rückgängig</strong>, um Aktionen zu revidieren.</p>
+
             <div class="community-box">
                 <h2>🙏 Danksagungen</h2>
-                <p>Danke an <a href="https://www.youtube.com/@shadowmeldgg"
-                        target="_blank"><strong>shadowmeldgg</strong></a> & <a
-                        href="https://www.youtube.com/@WhiterBronzebeard"
-                        target="_blank"><strong>WhiterBronzebeard</strong></a>.</p>
-                <p>Vergesst nicht zu <strong>Liken & Abonnieren</strong>!</p>
+                <p>Danke an shadowmeldgg & WhiterBronzebeard.</p>
+                <p>Vergesst nicht zu Abonnieren!</p>
                 <p><em>Erstellt mit ❤️ von der Community.</em></p>
+            </div>
+        </div>
+
+        <!-- ITALIANO -->
+        <div id="it" class="content-section">
+            <h1>📜 Guida Utente - Mystic Enchants Tracker (v1.5)</h1>
+            <p>Benvenuti nel <strong>Mystic Enchants Tracker</strong>.</p>
+
+            <h2>🚀 Inizio Rapido</h2>
+            <p>Fai doppio clic su <code>index.html</code>. Nessuna installazione richiesta.</p>
+
+            <hr>
+
+            <h2>🛠️ Caratteristiche Principali</h2>
+
+            <h3>1. Monitoraggio ("Collect")</h3>
+            <ul>
+                <li><strong>Raccogli</strong>: Clicca su <strong>"Collect"</strong>.</li>
+                <li><strong>Rimuovi</strong>: Clicca su <strong>"✕"</strong>.</li>
+                <li><strong>Progresso</strong>: Calcolo in tempo reale. Le etichette sono dinamiche (Fazione, Classe +
+                    Icona, Regione).</li>
+            </ul>
+
+            <h3>2. Filtraggio e Ricerca</h3>
+            <ul>
+                <li><strong>Search</strong>: Cerca per nome o zona.</li>
+                <li><strong>Faction</strong>: Filtra per <strong>ENTRAMBI</strong>, <strong>Alliance</strong>, o
+                    <strong>Horde</strong>.</li>
+                <li><strong>Lingua</strong>: Supporto per <strong>Inglese, Francese, Spagnolo, Tedesco e
+                        Italiano</strong>.</li>
+            </ul>
+
+            <h3>3. Guide e Posizioni (v1.5)</h3>
+            <ul>
+                <li><span class="btn-fake red">WATCH</span>: Apre video YouTube.</li>
+                <li><span class="btn-fake green">MAP</span>: Apre immagine mappa (da <code>Nonvid Locations</code>).
+                </li>
+            </ul>
+
+            <h3>4. Salvataggio e Dati</h3>
+            <ul>
+                <li><strong>💾 Save</strong>: Esporta progressi in <code>.json</code>.</li>
+                <li><strong>📂 Load</strong>: Carica file salvato.</li>
+            </ul>
+
+            <h3>5. Segnala un Bug</h3>
+            <p>Il pulsante <strong>⚠️ Segnala Bug</strong> apre un modulo pre-compilato.</p>
+
+            <h3>6. Funzione Annulla (Undo)</h3>
+            <p>Usa <strong>↩️ Annulla</strong> per annullare l'ultima azione.</p>
+
+            <div class="community-box">
+                <h2>🙏 Ringraziamenti</h2>
+                <p>Grazie a shadowmeldgg & WhiterBronzebeard.</p>
+                <p>Iscrivetevi ai loro canali!</p>
+                <p><em>Creato con ❤️ dalla comunità.</em></p>
             </div>
         </div>
 
@@ -482,7 +570,7 @@
 
             // Activate selected
             document.getElementById(lang).classList.add('active');
-            // Find button that calls this function (rough check)
+            // Find button that calls this function
             event.currentTarget.classList.add('active');
         }
     </script>
