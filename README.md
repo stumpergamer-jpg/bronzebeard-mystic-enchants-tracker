@@ -1,4 +1,4 @@
-# 📜 User Guide - Mystic Enchants Tracker (v1.5)
+# 📜 User Guide - Mystic Enchants Tracker (v1.6)
 
 Welcome to the **Mystic Enchants Tracker**, the ultimate tool to track your enchantment collection progress on WoW Ascension.
 

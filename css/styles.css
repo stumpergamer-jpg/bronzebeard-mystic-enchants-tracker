@@ -1,0 +1,1088 @@
+/*
+ * Copyright (C) 2026 Stumper_Gaming
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-dark: #0f0f0f;
+    --card-bg: #1a1a1a;
+    --accent: #f8b700;
+    --text-main: #e0e0e0;
+    --text-dim: #a0a0a0;
+    --border: #333;
+    --input-bg: #222;
+    --danger: #c41e3a;
+    --success: #4caf50;
+    --alliance: #0078ff;
+    --horde: #8c1616;
+    --font-main: 'Inter', sans-serif;
+}
+
+/* Animation pour le bouton Save */
+@keyframes pulse-save {
+    0% {
+        box-shadow: 0 0 0 0 rgba(248, 183, 0, 0.4);
+        border-color: var(--accent);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(248, 183, 0, 0);
+        border-color: var(--accent);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(248, 183, 0, 0);
+        border-color: var(--accent);
+    }
+}
+
+.btn-save-unsaved {
+    animation: pulse-save 2s infinite;
+    color: var(--accent) !important;
+    font-weight: bold !important;
+    background: rgba(248, 183, 0, 0.05) !important;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: var(--font-main);
+}
+
+body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    margin: 0;
+    padding: 10px;
+    line-height: 1.4;
+}
+
+.container {
+    max-width: 1250px;
+    margin: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* LANGUAGE SELECTOR */
+.lang-selector-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.lang-selector {
+    position: relative;
+    cursor: pointer;
+    padding: 8px 12px;
+    background: rgba(42, 42, 42, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+    backdrop-filter: blur(5px);
+}
+
+.lang-selector:hover {
+    border-color: var(--accent);
+    background: rgba(50, 50, 50, 0.9);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 5px;
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 140px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.lang-dropdown.show {
+    display: block;
+    animation: slideIn 0.2s ease-out;
+}
+
+.lang-item {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ccc;
+    font-size: 0.85rem;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.lang-item img {
+    width: 18px;
+    height: auto;
+    border-radius: 2px;
+}
+
+.lang-item:hover {
+    background: rgba(248, 183, 0, 0.2);
+    color: var(--accent);
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 15px;
+    flex: 0 0 auto;
+}
+
+h1 {
+    color: var(--accent);
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.credits-header {
+    display: none;
+    /* Hiding old one if needed, or just replacing it entirely in HTML */
+}
+
+.community-box {
+    background: linear-gradient(145deg, #1a1a1a, #222);
+    border: 1px solid #333;
+    border-left: 4px solid var(--accent);
+    border-right: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px auto 20px auto;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.community-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.community-text {
+    font-size: 0.95rem;
+    color: #ddd;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.credit-chip {
+    background: #cc0000;
+    /* YouTube Red-ish */
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.credit-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(204, 0, 0, 0.4);
+    background: #ff0000;
+}
+
+.cta-text {
+    font-size: 0.85rem;
+    color: #aaa;
+    font-style: italic;
+}
+
+.highlight-cta {
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+.top-bar {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.filter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.actions-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 15px;
+}
+
+.data-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-data {
+    font-weight: 600;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-data:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-report {
+    border-color: #444;
+    color: #888;
+    margin-left: auto;
+}
+
+.btn-report:hover {
+    border-color: var(--danger);
+    color: white;
+    background: rgba(196, 30, 58, 0.1);
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-wrapper::before {
+    content: "🔍";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    pointer-events: none;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px 40px 10px 40px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+#clearSearch {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #333;
+    color: #aaa;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-group {
+    flex: 1;
+    position: relative;
+    min-width: 150px;
+}
+
+.custom-select {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border);
+    color: white;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    height: 36px;
+    padding: 0 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 8px auto;
+}
+
+.options-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #222;
+    border: 1px solid var(--border);
+    z-index: 100;
+    display: none;
+    border-radius: 6px;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.options-list.show {
+    display: block;
+}
+
+.option-item {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #333;
+}
+
+.option-item:hover {
+    background: #333;
+    color: var(--accent);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.report-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.report-form select,
+.report-form textarea {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    width: 100%;
+    outline: none;
+}
+
+/* CADRE DÉTAILS NON MODIFIABLE EN TAILLE */
+.report-form textarea {
+    resize: none !important;
+}
+
+.report-form label {
+    font-size: 0.65rem;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.progress-section {
+    flex: 0 0 auto;
+    background: var(--card-bg);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+.progress-text {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.progress-bar-bg {
+    background: #111;
+    height: 8px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #b8860b, var(--accent));
+    transition: width 0.5s;
+}
+
+.table-wrapper {
+    flex: 1 1 auto;
+    overflow-x: auto;
+    background: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+thead {
+    background: #252525;
+}
+
+th {
+    padding: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    border-bottom: 2px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+th:nth-child(2),
+td:nth-child(2),
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(5),
+td:nth-child(5) {
+    text-align: left;
+}
+
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #252525;
+    font-size: 0.85rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+tr:hover td {
+    background: #222;
+}
+
+tr.collected {
+    opacity: 0.45;
+}
+
+.btn-action,
+.fac-btn,
+.btn-video {
+    transition: all 0.2s ease;
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin: auto;
+}
+
+.btn-collect {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+.btn-collect:hover {
+    background: rgba(76, 175, 80, 0.3);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-remove {
+    background: rgba(196, 30, 58, 0.1);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+.btn-remove:hover {
+    background: rgba(196, 30, 58, 0.3);
+    box-shadow: 0 0 8px rgba(196, 30, 58, 0.4);
+    transform: translateY(-1px);
+}
+
+.icon-class {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.fac-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+
+.btn-video {
+    font-size: 0.6rem;
+    padding: 4px 8px;
+    background: var(--danger);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 800;
+    display: inline-block;
+}
+
+.btn-video:hover {
+    background: #e61919;
+    box-shadow: 0 0 10px rgba(196, 30, 58, 0.4);
+    transform: scale(1.05);
+}
+
+.btn-map {
+    font-size: 0.6rem;
+    padding: 4px 14px;
+    background: var(--success);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 800;
+    display: inline-block;
+}
+
+.btn-map:hover {
+    background: #45a049;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+    transform: scale(1.05);
+}
+
+.btn-unknown {
+    font-size: 0.6rem;
+    padding: 4px 8px;
+    background: #444;
+    color: #aaa;
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: not-allowed;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.spell-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border-radius: 4px;
+    border: 1px solid #444;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    background-color: #000;
+}
+
+footer {
+    flex: 0 0 auto;
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+.credits-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.faction-selector {
+    display: flex;
+    background: #111;
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    gap: 4px;
+}
+
+.fac-btn {
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fac-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--text-dim);
+}
+
+.fac-btn.active.all {
+    background: #333;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.fac-btn.active.alliance {
+    background: var(--alliance);
+    color: white;
+}
+
+.fac-btn.active.horde {
+    background: var(--horde);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .progress-section {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- CORRECTIF TOOLTIP "ZÉRO VIDE" --- */
+#wowhead-tooltip,
+.wowhead-tooltip,
+.wh-tooltip {
+    width: 420px !important;
+    max-width: 420px !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    /* Supprime le rembourrage externe */
+}
+
+/* On force la table à coller aux bords */
+#wowhead-tooltip table {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+
+/* On cible les cellules de texte */
+#wowhead-tooltip td {
+    white-space: normal !important;
+    display: block !important;
+    height: auto !important;
+    padding: 0 10px !important;
+    /* Uniquement du padding latéral */
+}
+
+/* SUPPRESSION DES MARGES INTERNES (C'est souvent ici que se cache le vide) */
+#wowhead-tooltip p,
+#wowhead-tooltip ul,
+#wowhead-tooltip li,
+#wowhead-tooltip div {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* La description jaune : on lui donne juste une petite marge en haut pour respirer */
+.whtt-re-description {
+    display: block !important;
+    padding-top: 5px !important;
+    padding-bottom: 0px !important;
+    /* Réduit au minimum */
+    margin-bottom: 0 !important;
+}
+
+/* On cache les éléments de prix ou les sauts de ligne inutiles en bas */
+.whtt-sellprice,
+.whtt-extra,
+#wowhead-tooltip br:last-child {
+    display: none !important;
+}
+
+/* SCROLL NAV */
+.scroll-nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 9999;
+}
+
+.scroll-nav button {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ffd100;
+    /* Bordure dorée WoW */
+    background: #222;
+    /* Fond sombre */
+    color: #ffd100;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-nav button:hover {
+    background: #333;
+}
+
+@media (max-width: 768px) {
+
+    /* On ajoute de l'espace en haut de la boîte de remerciements */
+    .credits-container {
+        /* Remplace par la classe de ta boîte de remerciements */
+        margin-top: 50px;
+        clear: both;
+        /* Force l'élément à descendre sous les éléments flottants */
+    }
+
+    /* On s'assure que le sélecteur de langue ne flotte pas par-dessus */
+    .language-switcher {
+        position: static;
+        /* Remet le bouton dans le flux normal au lieu de flotter */
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+
+/* --- STYLES REPLIQUE ASCENSION DB (FIXED LAYOUT) --- */
+
+/* Reset global */
+/* ===================================================================
+   TOOLTIP STYLES - FROM WORKING REFERENCE
+   =================================================================== */
+
+.wowhead-tooltip {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    max-width: 420px;
+}
+
+.tooltip-box {
+    background: rgba(10, 10, 10, 0.96);
+    border: 1px solid #3a2a14;
+    padding: 12px;
+    max-width: 420px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.tt-name {
+    font-weight: bold;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.tt-meta {
+    font-size: 12px;
+    color: #c8a85a;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+.tt-body {
+    color: #ffd36a;
+    line-height: 1.45;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Rarity colors for meta */
+.rarity-common .tt-meta {
+    color: #ffffff;
+}
+
+.rarity-uncommon .tt-meta {
+    color: #1eff00;
+}
+
+.rarity-rare .tt-meta {
+    color: #0070dd;
+}
+
+.rarity-epic .tt-meta {
+    color: #a335ee;
+}
+
+.rarity-legendary .tt-meta {
+    color: #ff8000;
+}
+
+/* Padding content: STRATÉGIE ANTI-DÉCALAGE */
+/* 1. On met un padding standard sur les cellules de premier niveau */
+.wowhead-tooltip td {
+    padding: 3px 4px !important;
+    text-align: left !important;
+}
+
+/* 2. CRUCIAL: On retire le padding des tables IMBRIQUÉES pour éviter l'addition (4px + 4px = 8px de décalage) */
+.wowhead-tooltip table table td {
+    padding: 0 !important;
+}
+
+/* 3. On assure que le titre ne pousse pas via des marges */
+.wowhead-tooltip b {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* CORRECTION ALIGNEMENT TITRE & TEXTES */
+.wowhead-tooltip b,
+.wowhead-tooltip h3,
+.wowhead-tooltip div.whtt-name {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
+
+/* CACHER LE TEXTE DE RARETÉ */
+.wowhead-tooltip th:last-child {
+    display: none !important;
+}
+
+
+
+
+
+
+/* EXCEPTIONS COULEUR BLANCHE */
+/* Le nom de l'enchantement "Mystic Enchant" est souvent en class q1 (common) donc blanc */
+.wowhead-tooltip .q1,
+.wowhead-tooltip .mystic-common {
+    color: #ffffff !important;
+}
+
+/* DESCRIPTION SPECIFIQUE */
+.whtt-re-description {
+    color: #ffd100;
+}
+
+/* COULEURS - AVEC HAUTE SPECIFICITE POUR SURCHARGER LE JAUNE PAR DEFAUT */
+.wowhead-tooltip .mystic-epic,
+.wowhead-tooltip .q4,
+.wowhead-tooltip b.q4,
+.wowhead-tooltip span.q4 {
+    color: #a335ee !important;
+    font-size: 14px !important;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.wowhead-tooltip .mystic-legendary,
+.wowhead-tooltip .q5,
+.wowhead-tooltip b.q5,
+.wowhead-tooltip span.q5 {
+    color: #ff8000 !important;
+    font-size: 14px !important;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.wowhead-tooltip .mystic-rare,
+.wowhead-tooltip .q3 {
+    color: #0070dd !important;
+}
+
+.wowhead-tooltip .mystic-common,
+.wowhead-tooltip .q1 {
+    color: #ffffff !important;
+    font-weight: normal !important;
+}
+
+.wowhead-tooltip .q2 {
+    color: #1eff00 !important;
+}
+
+.wowhead-tooltip .q0 {
+    color: #9d9d9d !important;
+}
+
+.wowhead-tooltip td:first-child b {
+    font-size: 14px !important;
+}
+
+/* Force word-wrap in Wowhead tooltips - Aggressive override */
+div.wowhead-tooltip {
+    width: 420px !important;
+    min-width: 420px !important;
+    max-width: 420px !important;
+    box-sizing: border-box !important;
+}
+
+div.wowhead-tooltip table {
+    width: 420px !important;
+    min-width: 420px !important;
+    max-width: 420px !important;
+    table-layout: fixed !important;
+    box-sizing: border-box !important;
+}
+
+div.wowhead-tooltip table td,
+div.wowhead-tooltip table th {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+    max-width: 100% !important;
+}
+
+/* Force all text elements inside tooltips to wrap */
+div.wowhead-tooltip * {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+}
